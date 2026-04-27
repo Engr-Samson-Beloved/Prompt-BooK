@@ -4,10 +4,10 @@ import { NavLink } from 'react-router-dom';
 const Navbar: React.FC = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Portfolio', path: '/portfolio' },
+    { name: 'Features', path: '/services' },
+    { name: 'Carousel', path: '/portfolio' },
     { name: 'Experience', path: '/experience' },
-    { name: 'Connect', path: '/connect' },
+    { name: 'Get Access', path: '/connect' },
   ];
 
   return (

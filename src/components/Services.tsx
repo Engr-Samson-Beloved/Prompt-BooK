@@ -1,50 +1,44 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Code2, Smartphone, Layout, ShieldAlert, Cpu, Bitcoin, ArrowUpRight, Cog } from 'lucide-react';
+import { Scan, Expand, LayoutGrid, ArrowLeftRight, Network, Lock, ArrowUpRight, Cog } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const services = [
   {
-    title: "Blockchain Dev.",
-    desc: "Expert in dApps, smart contracts and Web3 development. I build secure blockchain solutions for NFTs and DeFi.",
-    icon: <Bitcoin className="w-6 h-6 text-brand-black" />,
+    title: "Reverse Prompt Engine",
+    desc: "Upload any image and our AI analyzes composition, lighting, and style to return a structured prompt.",
+    icon: <Scan className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-[#FFB703]/20 text-[#FFB703]",
-    iconType: "bitcoin"
   },
   {
-    title: "Web Development",
-    desc: "I develop complete Web applications, covering both backend and frontend aspects to deliver a seamless and engaging user experience.",
-    icon: <Code2 className="w-6 h-6 text-brand-black" />,
+    title: "Idea Expander",
+    desc: "Type a rough idea and expand it into a full, production-ready prompt with mood board references.",
+    icon: <Expand className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-[#E34F26]/20 text-[#E34F26]",
-    iconType: "html5" // simplified to code icon
   },
   {
-    title: "Mobile/PC App",
-    desc: "Build powerful cross platform mobile and desktop applications for iOS, Android & Windows using React Native, Flutter, Swift (iOS/macOS), Kotlin (Android), and Java/.NET (Windows).",
-    icon: <Smartphone className="w-6 h-6 text-brand-black" />,
+    title: "High-End Carousel",
+    desc: "Curated gallery of stunning AI outputs. Find a style you like, click 'Get Prompt as API'.",
+    icon: <LayoutGrid className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-[#61DAFB]/20 text-[#61DAFB]",
-    iconType: "react"
   },
   {
-    title: "UI/UX",
-    desc: "I design intuitive user interfaces and interactive prototypes. I create elegant and functional digital experiences.",
-    icon: <Layout className="w-6 h-6 text-brand-black" />,
+    title: "Cross-Model Compat",
+    desc: "Single prompt automatically translated for Midjourney, DALL-E 3, Stable Diffusion, and more.",
+    icon: <ArrowLeftRight className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-[#A259FF]/20 text-[#A259FF]",
-    iconType: "figma"
   },
   {
-    title: "Cybersecurity",
-    desc: "Protecting your systems and data from digital threats. Security audits, penetration testing, and implementation of robust protective measures.",
-    icon: <ShieldAlert className="w-6 h-6 text-brand-black" />,
+    title: "Microservice Connectors",
+    desc: "Every saved prompt gets a REST endpoint. Connect your API keys and we handle routing and fallbacks.",
+    icon: <Network className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-[#00D1B2]/20 text-[#00D1B2]",
-    iconType: "shield"
   },
   {
-    title: "AI/Automation",
-    desc: "Leveraging artificial intelligence to automate processes and enhance productivity through smart solutions and integrations.",
-    icon: <Cpu className="w-6 h-6 text-brand-black" />,
+    title: "Consistency Mode",
+    desc: "Upload reference brand assets to extract style embeddings and lock them across future generations.",
+    icon: <Lock className="w-6 h-6 text-brand-black" />,
     badgeColor: "bg-neutral-800 text-white",
-    iconType: "ai"
   }
 ];
 
@@ -59,7 +53,7 @@ const Services: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           className="text-5xl md:text-6xl font-display mb-12 text-center"
         >
-          Services<span className="text-neutral-300">.</span>
+          Features<span className="text-neutral-300">.</span>
         </motion.h2>
       </div>
 
@@ -71,7 +65,7 @@ const Services: React.FC = () => {
           className="bg-brand-black rounded-3xl p-10 flex flex-col justify-between text-white relative overflow-hidden group"
         >
           <div>
-            <h3 className="text-3xl font-display mb-4 max-w-[200px]">Let's talk about your project</h3>
+            <h3 className="text-3xl font-display mb-4 max-w-[200px]">Get started with promptBook</h3>
             <button 
               onClick={() => navigate('/connect')}
               className="px-8 py-3 bg-white text-brand-black rounded-full font-bold hover:bg-neutral-100 transition-colors z-10 relative"

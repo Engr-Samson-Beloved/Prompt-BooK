@@ -10,8 +10,8 @@ const Connect: React.FC = () => {
         whileInView={{ opacity: 1, y: 0 }}
         className="text-center mb-16"
       >
-        <h2 className="text-5xl md:text-6xl font-display mb-6">Connect<span className="text-neutral-300">.</span></h2>
-        <p className="text-neutral-500 text-lg font-sans">Have a project in mind? Let's build something extraordinary together.</p>
+        <h2 className="text-5xl md:text-6xl font-display mb-6">Get Access<span className="text-neutral-300">.</span></h2>
+        <p className="text-neutral-500 text-lg font-sans">Join the waitlist to start reverse-engineering creativity.</p>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -22,7 +22,7 @@ const Connect: React.FC = () => {
         >
           <Mail className="w-10 h-10 mb-4 text-brand-accent" />
           <h3 className="text-xl font-display mb-2">Email</h3>
-          <p className="text-neutral-500">hello@bytegen.dev</p>
+          <p className="text-neutral-500">hello@promptbook.com</p>
         </motion.div>
 
         <motion.div 
@@ -50,7 +50,7 @@ const Connect: React.FC = () => {
               className="w-full px-6 py-4 rounded-2xl bg-neutral-50 border border-neutral-100 focus:outline-none focus:border-brand-black transition-colors"
             />
             <button className="w-full py-4 bg-brand-black text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-              Send Message <Send className="w-4 h-4" />
+              Join Waitlist <Send className="w-4 h-4" />
             </button>
           </form>
         </motion.div>

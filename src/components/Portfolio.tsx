@@ -3,10 +3,10 @@ import { motion } from 'motion/react';
 import { ExternalLink } from 'lucide-react';
 
 const projects = [
-  { title: "Defi Exchange", category: "Blockchain", image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1000&auto=format&fit=crop" },
-  { title: "NFT Marketplace", category: "Web3", image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" },
-  { title: "Modern CRM", category: "Web App", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop" },
-  { title: "Fitness Tracker", category: "Mobile", image: "https://images.unsplash.com/photo-1510017803434-a899398421b3?q=80&w=1000&auto=format&fit=crop" },
+  { title: "Cyberpunk Cityscape", category: "Midjourney v6", image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1000&auto=format&fit=crop" },
+  { title: "Minimalist Product Render", category: "DALL-E 3", image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" },
+  { title: "Corporate Branding Kit", category: "Stable Diffusion 3.5", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop" },
+  { title: "Cinematic Character Portrait", category: "Firefly 2", image: "https://images.unsplash.com/photo-1510017803434-a899398421b3?q=80&w=1000&auto=format&fit=crop" },
 ];
 
 const Portfolio: React.FC = () => {
@@ -17,7 +17,7 @@ const Portfolio: React.FC = () => {
         whileInView={{ opacity: 1, y: 0 }}
         className="text-5xl md:text-6xl font-display mb-16"
       >
-        Portfolio<span className="text-neutral-300">.</span>
+        Carousel Showcase<span className="text-neutral-300">.</span>
       </motion.h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

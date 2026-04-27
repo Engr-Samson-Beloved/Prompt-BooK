@@ -1,0 +1,192 @@
+# promptBook Brand Guidelines
+
+## Brand Essence
+
+**Tagline:** *Reverse-engineer creativity.*
+
+**Core Idea:** promptBook is where AI outputs become repeatable prompts. We bridge the gap between “I saw something amazing” and “I can recreate it reliably”—across any AI tool, any model, any microservice.
+
+**Personality:**  
+- **Confident** (we reverse-engineer what others can’t)  
+- **Precise** (prompts are code, outputs are truth)  
+- **Fluid** (connects to any AI, any workflow)  
+- **Minimal but deep** (interface is calm; power is underneath)
+
+---
+
+## Color Palette
+
+### Primary (Action & Energy)
+| Color | Hex | Usage |
+|-------|-----|-------|
+| **Prompt Violet** | `#6C3BFF` | Primary buttons, active carousel slides, key accents |
+| **Deep Indigo** | `#1A0B2E` | Background for hero sections, dark mode default |
+
+### Secondary (Information & Feedback)
+| Color | Hex | Usage |
+|-------|-----|-------|
+| **Output Cyan** | `#00E5FF` | Generated prompt cards, hover states, microservice indicators |
+| **Neutral Graphite** | `#2A2A2A` | Text on light mode, secondary UI surfaces |
+| **Success Green** | `#00D26A` | “Prompt works” verification, connection status |
+
+### Neutrals (Layout Foundation)
+| Color | Hex | Usage |
+|-------|-----|-------|
+| **White** | `#FFFFFF` | Primary text on dark, card backgrounds (light mode) |
+| **Off-Black** | `#0F0F0F` | Body text (dark mode) |
+| **Soft Grey** | `#E8E8E8` | Dividers, subtle borders |
+
+**Accessibility:** All color pairs meet WCAG 2.1 AA contrast (minimum 4.5:1 for body text).
+
+---
+
+## Typography
+
+### Primary Font Family: **Inter** (Variable)
+- **Use case:** All UI text, prompts, documentation, microservice labels.
+- **Weights:** 400 (regular), 500 (medium), 600 (semibold), 700 (bold).
+- **Fallback:** system-ui, -apple-system, sans-serif.
+
+### Monospace Font: **JetBrains Mono**
+- **Use case:** Code snippets, API responses, prompt syntax highlighting, microservice connectors configuration.
+- **Fallback:** monospace.
+
+### Type Scale (rem → px @ 16px base)
+| Level | rem | px | Weight | Use case |
+|-------|-----|----|--------|----------|
+| Display | 3.5 | 56 | 600 | Hero headlines, carousel feature titles |
+| Heading 1 | 2.5 | 40 | 600 | Section headers |
+| Heading 2 | 1.75 | 28 | 500 | Card titles, modal headers |
+| Heading 3 | 1.25 | 20 | 500 | Prompt names, microservice labels |
+| Body Large | 1 | 16 | 400 | Standard text, carousel descriptions |
+| Body Small | 0.875 | 14 | 400 | Helper text, timestamps |
+| Mono Base | 0.875 | 14 | 400 | Inline code, prompt snippets |
+
+**Line height:** 1.5 for body; 1.2 for headings.
+
+---
+
+## Layout Principles
+
+### Grid System
+- **12-column responsive grid** (Bootstrap-style but custom implementation)
+- **Margins:** 24px on mobile, 48px on desktop, 120px on wide screens (>1440px)
+- **Gutter:** 24px consistent
+
+### Spacing Units (8px base)
+| Token | rem | px |
+|-------|-----|----|
+| xs | 0.25 | 4 |
+| sm | 0.5 | 8 |
+| md | 1 | 16 |
+| lg | 1.5 | 24 |
+| xl | 2 | 32 |
+| 2xl | 3 | 48 |
+| 3xl | 4 | 64 |
+
+**Rule:** All margins, paddings, and component gaps use multiples of 8px.
+
+### Page Structure (Typical)
+
+
+
+
+
+
+
+
+
+
+### Carousel (Your High‑End Showcase)
+- **Height:** 480px on desktop, 320px mobile
+- **Slides:** Each shows an AI-generated output (image/video) + prompt preview
+- **Overlay:** Dark gradient (from 80% to 0% opacity) with prompt text and “Get Prompt” button
+- **Navigation:** Arrow buttons on sides + pagination dots (Violet when active)
+- **Autoplay:** Off by default (user control first)
+- **Animation:** Fade + scale (0.98 → 1) for slide transitions, 300ms ease-out
+
+---
+
+## Design Elements
+
+### Cards (Prompt & Microservice)
+- **Border radius:** 16px
+- **Background:** `#1A1A1A` (dark mode) or `#FFFFFF` (light mode) with `box-shadow: 0 4px 12px rgba(0,0,0,0.1)`
+- **Hover:** Elevation to `0 8px 24px rgba(0,0,0,0.15)` + border `1px solid #6C3BFF` at 40% opacity
+- **Inner padding:** 24px
+
+### Buttons
+| Type | Background | Text | Border | Radius | Padding |
+|------|------------|------|--------|--------|---------|
+| Primary | `#6C3BFF` | White | none | 40px (pill) | 12px 24px |
+| Secondary | transparent | `#00E5FF` | 1px solid `#00E5FF` | 40px | 12px 24px |
+| Tertiary | transparent | `#FFFFFF` 70% | none | 40px | 8px 16px |
+
+**Hover (Primary):** `#855CFF`; **Active:** `#4B2BBF`
+
+### Microservice Connector Visual
+- **Pill-shaped badge** with icon (plug, API, or custom logo)
+- **Status dot:** Green (connected), Yellow (connecting), Red (error), Grey (disabled)
+- **Tooltip** shows endpoint URL or last successful call
+
+### Icons
+- Use Lucide Icons (open source, consistent stroke width 1.5px)
+- Default size: 20x20px
+- Color inherits text color, except interactive icons use `#6C3BFF` on hover
+
+---
+
+## Tone of Voice (Written Content)
+
+- **Direct, not academic:** “Upload an image. We’ll give you the prompt.” (not “Users may submit visual assets for analysis”)
+- **Empathetic to frustration:** “Couldn’t get that consistent style? We’ve been there.”
+- **Precise about technicalities:** When explaining prompt syntax or microservice headers, be exact.
+- **No hype without proof:** Instead of “amazing results”, show the carousel.
+
+**Examples:**
+- Button label: “Reverse Prompt” (not “Generate”)
+- Empty state: “No prompts yet. Upload something →”
+- Error: “Couldn’t parse image. Try a different file or describe the style below.”
+
+---
+
+## Visual Examples (Reference)
+
+| Element | Do | Don’t |
+|---------|----|-------|
+| Hero section | Bloodless background with violet accent line + floating carousel preview | Busy, multi‑colored gradient |
+| Prompt card | Monospace prompt preview (truncate after 3 lines) + “Copy” icon | Paragraph text without syntax highlighting |
+| Carousel slide | Real AI output (no stock photos) + prompt overlay readable in 2 seconds | Generic 3D renders without context |
+| Microservice panel | Grouped by API (OpenAI, Replicate, etc.) with toggle switches | Scrolling list of long URLs |
+
+---
+
+## Logo Usage (If Not Provided Yet)
+
+*Placeholder spec until final logo is delivered:*  
+- **Symbol:** Abstract “P” made of two overlapping brackets `[ ]` rotated 45°, reminiscent of a prompt syntax and a play button.  
+- **Logotype:** Inter SemiBold, “promptBook” lowercase “p”, uppercase “B”.  
+- **Minimum size:** 40px height (digital), 0.5 inch print.  
+- **Clearspace:** Equal to the height of the “p”.
+
+---
+
+## Implementation Notes (for Design & Dev)
+
+- **Dark mode first.** Our default interface is dark (`#0F0F0F` background) with light mode as alternate.
+- **Motion preference:** Respect `prefers-reduced-motion`. Disable carousel animations and hover lifts when requested.
+- **Responsive breakpoints:**  
+  - Mobile: < 640px (stack everything)  
+  - Tablet: 640–1024px (2-column carousel preview)  
+  - Desktop: > 1024px (full grid)
+
+---
+
+## Final Brand Commitment
+
+**Every pixel of promptBook exists to make AI outputs predictable and reusable.**  
+If a design element prioritizes style over clarity — remove it. If a layout doesn’t showcase the reverse prompting immediately — rework it.
+
+This is not a gallery. This is an **engineering tool with a beautiful face.**
+
+*Last updated: 2026-04-26*

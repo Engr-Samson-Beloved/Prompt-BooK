@@ -1,0 +1,153 @@
+:root {
+  --book-width: 400px;
+  --book-height: 550px;
+  --book-depth: 40px;
+  --cover-color: #0a0a0a;
+  --accent-gold: #c8a03c;
+  --page-color: #f5f5f5;
+  --transition-speed: 1.2s;
+}
+
+body {
+  margin: 0;
+  background: #040806;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  perspective: 2000px;
+}
+
+.scene {
+  width: var(--book-width);
+  height: var(--book-height);
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--transition-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.book {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+/* Cover Styling */
+.cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--cover-color);
+  border-radius: 4px 15px 15px 4px;
+  box-shadow: 
+    inset 4px 0 10px rgba(255,255,255,0.05),
+    10px 10px 40px rgba(0,0,0,0.5);
+  transform-origin: left;
+  transform-style: preserve-3d;
+  transition: transform var(--transition-speed) cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 10;
+}
+
+.cover-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-left: 10px solid #1a1a1a;
+}
+
+.cover-front::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 2px solid rgba(200, 160, 60, 0.2);
+  margin: 20px;
+  pointer-events: none;
+}
+
+.logo-text {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  text-shadow: 0 0 20px rgba(200, 160, 60, 0.3);
+}
+
+.tagline {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+/* Page Styling */
+.pages {
+  position: absolute;
+  width: 95%;
+  height: 96%;
+  top: 2%;
+  left: 2%;
+  background: var(--page-color);
+  transform: translateZ(-1px);
+  transform-style: preserve-3d;
+}
+
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  padding: 40px;
+  box-sizing: border-box;
+  color: #333;
+  transform-origin: left;
+  transition: transform var(--transition-speed) ease;
+}
+
+/* Content inside the book */
+.book-content {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  transition-delay: 0.8s;
+  color: black;
+}
+
+.content-header {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #208251, #c8a03c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animation State */
+.book.open .cover-front {
+  transform: rotateY(-160deg);
+}
+
+.book.open .book-content {
+  opacity: 1;
+}
+
+.book.open {
+  transform: translateX(50%) rotateY(-20deg);
+}
+
+/* Ambient Lighting */
+.scene::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle, rgba(32,130,81,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}

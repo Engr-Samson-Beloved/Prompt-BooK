@@ -1,15 +1,15 @@
 import React from 'react';
 import { motion } from 'motion/react';
 
-const stocks = [
-  { symbol: 'XDI', price: '$1.7', change: '+0.00%', color: 'text-emerald-500' },
-  { symbol: 'MSFT', price: '$424.85', change: '+0.22%', color: 'text-emerald-500' },
-  { symbol: 'AAPL', price: '$271.9', change: '+0.64%', color: 'text-emerald-500' },
-  { symbol: 'NVDA', price: '$208.57', change: '+0.77%', color: 'text-emerald-500' },
-  { symbol: 'GOOGL', price: '$343.73', change: '+0.03%', color: 'text-emerald-500' },
-  { symbol: 'AMZN', price: '$264.47', change: '+0.51%', color: 'text-emerald-500' },
-  { symbol: 'TSLA', price: '$198.40', change: '-1.45%', color: 'text-rose-500' },
-  { symbol: 'META', price: '$502.12', change: '+1.12%', color: 'text-emerald-500' },
+const models = [
+  { symbol: 'GPT-4O', stat: '99.9%', desc: 'Uptime', color: 'text-emerald-500' },
+  { symbol: 'CLAUDE 3.5', stat: '98.5%', desc: 'Accuracy', color: 'text-emerald-500' },
+  { symbol: 'MIDJOURNEY v6', stat: '10M+', desc: 'Prompts', color: 'text-emerald-500' },
+  { symbol: 'DALL-E 3', stat: 'Fast', desc: 'Latency', color: 'text-emerald-500' },
+  { symbol: 'STABLE DIFF.', stat: 'v3.5', desc: 'Active', color: 'text-emerald-500' },
+  { symbol: 'FIREFLY 2', stat: 'Synced', desc: 'Status', color: 'text-emerald-500' },
+  { symbol: 'GEMINI 1.5', stat: 'Online', desc: 'Status', color: 'text-emerald-500' },
+  { symbol: 'LLAMA 3', stat: 'Local', desc: 'Node', color: 'text-neutral-500' },
 ];
 
 const Ticker: React.FC = () => {
@@ -18,12 +18,12 @@ const Ticker: React.FC = () => {
       <div className="flex animate-scroll whitespace-nowrap">
         {[...Array(2)].map((_, i) => (
           <div key={i} className="flex gap-12 items-center px-6">
-            {stocks.map((stock) => (
-              <div key={stock.symbol} className="flex flex-col items-center min-w-[100px]">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{stock.symbol}</span>
-                <span className="text-sm font-semibold">{stock.price}</span>
-                <span className={`text-[10px] font-bold ${stock.change.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>
-                  {stock.change}
+            {models.map((model) => (
+              <div key={model.symbol} className="flex flex-col items-center min-w-[100px]">
+                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{model.symbol}</span>
+                <span className="text-sm font-semibold">{model.stat}</span>
+                <span className={`text-[10px] font-bold ${model.color}`}>
+                  {model.desc}
                 </span>
               </div>
             ))}
