@@ -3,69 +3,113 @@ import { motion } from 'motion/react';
 import { ArrowDownRight, Cpu, Zap, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
-import NeuralCore from './NeuralCore';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import NeuralNexus from './NeuralNexus';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Hero: React.FC = () => {
   const navigate = useNavigate();
+  const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const visualRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!textRef.current) return;
+    if (!textRef.current || !sectionRef.current || !visualRef.current) return;
 
     const ctx = gsap.context(() => {
+      // Entrance Animation
       gsap.from(".hero-title span", {
         y: 100,
         opacity: 0,
-        duration: 1,
+        duration: 1.2,
         stagger: 0.1,
         ease: "expo.out"
       });
 
       gsap.from(".hero-description", {
         opacity: 0,
-        x: -20,
+        x: -30,
         duration: 1,
-        delay: 0.5,
+        delay: 0.6,
         ease: "power3.out"
       });
 
       gsap.from(".hero-cta", {
         opacity: 0,
-        y: 20,
+        y: 30,
         duration: 1,
-        delay: 0.8,
+        delay: 1,
         ease: "power3.out"
       });
-    }, textRef);
+
+      // Scroll Interactions
+      gsap.to(visualRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1
+        },
+        y: 200,
+        rotationZ: 45,
+        scale: 0.8,
+        opacity: 0.5
+      });
+
+      gsap.to(textRef.current, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1
+        },
+        y: -100,
+        opacity: 0
+      });
+
+      // Parallax on technical elements
+      gsap.to(".tech-overlay", {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 2
+        },
+        y: -150,
+        stagger: 0.1
+      });
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 overflow-hidden pt-0 pb-12 px-6 bg-white -mt-24">
+    <section 
+      ref={sectionRef}
+      className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 overflow-hidden pt-0 pb-12 px-6 bg-white -mt-24"
+    >
       {/* Subtle Background Glows */}
       <div className="glow-bg -top-40 -left-40 opacity-10" />
       <div className="glow-bg -bottom-40 -right-40 opacity-5" />
 
-      {/* 3D Neural Core */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2 }}
-        className="relative flex items-center justify-center w-full lg:w-1/2"
+      {/* 3D Neural Nexus Container */}
+      <div 
+        ref={visualRef}
+        className="relative flex items-center justify-center w-full lg:w-1/2 z-10"
       >
-        <NeuralCore />
+        <NeuralNexus />
         
         {/* Technical Overlays */}
-        <div className="absolute top-0 left-0 p-4 border-l border-t border-brand-accent/20 font-mono text-[10px] text-neutral-400">
+        <div className="tech-overlay absolute top-0 left-0 p-4 border-l border-t border-brand-accent/20 font-mono text-[10px] text-neutral-400">
           CORE_SYNC: ACTIVE<br />
           NEURAL_LOAD: 12.4%
         </div>
-        <div className="absolute bottom-0 right-0 p-4 border-r border-b border-brand-accent/20 font-mono text-[10px] text-neutral-400 text-right">
+        <div className="tech-overlay absolute bottom-0 right-0 p-4 border-r border-b border-brand-accent/20 font-mono text-[10px] text-neutral-400 text-right">
           QUANTUM_STATE: STABLE<br />
           LATENCY: 2.4ms
         </div>
-      </motion.div>
+      </div>
 
       {/* Content Column */}
       <div 
@@ -75,7 +119,7 @@ const Hero: React.FC = () => {
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-neutral-100 border border-neutral-200 mb-8 backdrop-blur-md">
           <Activity className="w-3 h-3 text-brand-accent animate-pulse" />
           <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-neutral-500">
-            System Architecture v4.0.2
+            Neural Engine v4.0.2
           </span>
         </div>
 
@@ -95,7 +139,7 @@ const Hero: React.FC = () => {
         <div className="hero-cta flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
           <button 
             onClick={() => navigate('/portfolio')}
-            className="group relative flex items-center gap-4 px-10 py-5 bg-brand-black text-white rounded-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-accent transition-all overflow-hidden shadow-lg shadow-black/10"
+            className="group relative flex items-center gap-4 px-10 py-5 bg-brand-black text-white rounded-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-accent transition-all overflow-hidden shadow-xl shadow-black/10"
           >
             <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12" />
             <Cpu className="w-5 h-5" />
