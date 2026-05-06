@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 
 const openai = new OpenAI({
   // Vite looks into your .env file for this specific name
