@@ -12,6 +12,7 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
     { name: 'Carousel', path: '/portfolio' },
     { name: 'Experience', path: '/experience' },
     { name: 'Generate', path: '/generate' },
+    { name: 'Get Access', path: '/pricing' },
   ];
 
   return (
@@ -32,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
           onClick={onOpenConnect}
           className="nav-item bg-brand-black text-white hover:bg-brand-accent transition-colors ml-1 px-4"
         >
-          Get Access
+          Sign In
         </button>
       </nav>
     </header>

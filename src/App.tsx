@@ -18,6 +18,8 @@ import PromptEngine from './components/PromptEngine';
 
 import ConnectModal from './components/ConnectModal';
 
+import Pricing from './components/Pricing';
+
 const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
   const location = useLocation();
 
@@ -32,6 +34,16 @@ const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
             transition={{ duration: 0.5 }}
           >
             <Hero onOpenConnect={onOpenConnect} />
+          </motion.div>
+        } />
+        <Route path="/pricing" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Pricing />
           </motion.div>
         } />
         <Route path="/services" element={
