@@ -15,9 +15,8 @@ import Experience from './components/Experience';
 import Connect from './components/Connect';
 import Ticker from './components/Ticker';
 import PromptEngine from './components/PromptEngine';
-
 import ConnectModal from './components/ConnectModal';
-
+import CustomCursor from './components/CustomCursor';
 import Pricing from './components/Pricing';
 
 const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
@@ -97,6 +96,7 @@ export default function App() {
   return (
     <Router>
       <div className="min-h-screen bg-brand-white text-brand-black">
+        <CustomCursor />
         <Navbar onOpenConnect={() => setIsConnectOpen(true)} />
         <Layout>
           <AnimatedRoutes onOpenConnect={() => setIsConnectOpen(true)} />

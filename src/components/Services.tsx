@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion } from 'motion/react';
-import { Scan, Expand, LayoutGrid, ArrowLeftRight, Network, Lock, ArrowUpRight, Cog } from 'lucide-react';
+import { Scan, Expand, LayoutGrid, ArrowLeftRight, Network, Lock, ArrowUpRight, Cog, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 
@@ -57,8 +57,8 @@ const FeatureCard: React.FC<{ service: typeof services[0], idx: number }> = ({ s
     });
 
     // 3D Tilt
-    const rotateX = ((y / height) - 0.5) * 10; // Max 5deg
-    const rotateY = ((x / width) - 0.5) * -10; // Max 5deg
+    const rotateX = ((y / height) - 0.5) * 10;
+    const rotateY = ((x / width) - 0.5) * -10;
 
     gsap.to(cardRef.current, {
       rotateX,

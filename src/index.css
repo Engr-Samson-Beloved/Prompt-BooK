@@ -14,9 +14,14 @@
 
 @layer base {
   body {
-    @apply bg-brand-white text-brand-black font-sans antialiased selection:bg-brand-black selection:text-white;
+    cursor: none;
+    @apply bg-brand-white text-brand-black font-sans antialiased overflow-x-hidden selection:bg-brand-black selection:text-white;
   }
   
+  a, button, [role="button"], .nav-item {
+    cursor: none;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     @apply font-display font-semibold tracking-tight;
   }
