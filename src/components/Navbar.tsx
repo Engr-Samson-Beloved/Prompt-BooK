@@ -7,6 +7,7 @@ const Navbar: React.FC = () => {
     { name: 'Features', path: '/services' },
     { name: 'Carousel', path: '/portfolio' },
     { name: 'Experience', path: '/experience' },
+    { name: 'Generate', path: '/generate' },
     { name: 'Get Access', path: '/connect' },
   ];
 
