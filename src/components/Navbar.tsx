@@ -1,19 +1,22 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onOpenConnect?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Features', path: '/services' },
     { name: 'Carousel', path: '/portfolio' },
     { name: 'Experience', path: '/experience' },
     { name: 'Generate', path: '/generate' },
-    { name: 'Get Access', path: '/connect' },
   ];
 
   return (
-    <header className="fixed top-8 left-1/2 -translate-x-1/2 z-[100]">
-      <nav className="pill-nav px-2 py-1.5 shadow-lg">
+    <header className="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-fit">
+      <nav className="pill-nav px-2 py-1.5 shadow-xl flex items-center gap-1">
         {navLinks.map((link) => (
           <NavLink
             key={link.name}
@@ -25,6 +28,12 @@ const Navbar: React.FC = () => {
             {link.name}
           </NavLink>
         ))}
+        <button 
+          onClick={onOpenConnect}
+          className="nav-item bg-brand-black text-white hover:bg-brand-accent transition-colors ml-1 px-4"
+        >
+          Get Access
+        </button>
       </nav>
     </header>
   );

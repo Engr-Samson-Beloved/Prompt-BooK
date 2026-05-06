@@ -42,7 +42,7 @@ const services = [
   }
 ];
 
-const Services: React.FC = () => {
+const Services: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) => {
   const navigate = useNavigate();
 
   return (
@@ -67,7 +67,7 @@ const Services: React.FC = () => {
           <div>
             <h3 className="text-3xl font-display mb-4 max-w-[200px]">Get started with promptBook</h3>
             <button 
-              onClick={() => navigate('/connect')}
+              onClick={onOpenConnect}
               className="px-8 py-3 bg-white text-brand-black rounded-full font-bold hover:bg-neutral-100 transition-colors z-10 relative"
             >
               CONNECT

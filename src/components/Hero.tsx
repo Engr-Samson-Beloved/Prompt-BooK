@@ -8,7 +8,7 @@ import NeuralNexus from './NeuralNexus';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Hero: React.FC = () => {
+const Hero: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -138,7 +138,7 @@ const Hero: React.FC = () => {
 
         <div className="hero-cta flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
           <button 
-            onClick={() => navigate('/portfolio')}
+            onClick={onOpenConnect}
             className="group relative flex items-center gap-4 px-10 py-5 bg-brand-black text-white rounded-sm font-mono font-bold uppercase tracking-widest hover:bg-brand-accent transition-all overflow-hidden shadow-xl shadow-black/10"
           >
             <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12" />

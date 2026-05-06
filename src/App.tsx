@@ -16,7 +16,9 @@ import Connect from './components/Connect';
 import Ticker from './components/Ticker';
 import PromptEngine from './components/PromptEngine';
 
-const AnimatedRoutes = () => {
+import ConnectModal from './components/ConnectModal';
+
+const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
   const location = useLocation();
 
   return (
@@ -29,7 +31,7 @@ const AnimatedRoutes = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
           >
-            <Hero />
+            <Hero onOpenConnect={onOpenConnect} />
           </motion.div>
         } />
         <Route path="/services" element={
@@ -39,7 +41,7 @@ const AnimatedRoutes = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
           >
-            <Services />
+            <Services onOpenConnect={onOpenConnect} />
           </motion.div>
         } />
         <Route path="/portfolio" element={
@@ -62,16 +64,6 @@ const AnimatedRoutes = () => {
             <Experience />
           </motion.div>
         } />
-        <Route path="/connect" element={
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Connect />
-          </motion.div>
-        } />
         <Route path="/generate" element={
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -88,14 +80,21 @@ const AnimatedRoutes = () => {
 };
 
 export default function App() {
+  const [isConnectOpen, setIsConnectOpen] = React.useState(false);
+
   return (
     <Router>
       <div className="min-h-screen bg-brand-white text-brand-black">
-        <Navbar />
+        <Navbar onOpenConnect={() => setIsConnectOpen(true)} />
         <Layout>
-          <AnimatedRoutes />
+          <AnimatedRoutes onOpenConnect={() => setIsConnectOpen(true)} />
         </Layout>
         <Ticker />
+        
+        <ConnectModal 
+          isOpen={isConnectOpen} 
+          onClose={() => setIsConnectOpen(false)} 
+        />
       </div>
     </Router>
   );
