@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { getAbsolutePrompt } from './openai';
-import { runMJScript } from './mjscript.mjs';
+import { runMJScript } from './promptbook.mjs';
 
 function App() {
   const [subject, setSubject] = useState('');
