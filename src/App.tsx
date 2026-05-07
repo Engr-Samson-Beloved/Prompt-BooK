@@ -13,7 +13,6 @@ import Services from './components/Services';
 import Portfolio from './components/Portfolio';
 import Connect from './components/Connect';
 import Ticker from './components/Ticker';
-import PromptEngine from './components/PromptEngine';
 import ConnectModal from './components/ConnectModal';
 import CustomCursor from './components/CustomCursor';
 import Pricing from './components/Pricing';
@@ -63,16 +62,6 @@ const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
             transition={{ duration: 0.5 }}
           >
             <Portfolio />
-          </motion.div>
-        } />
-        <Route path="/generate" element={
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            <PromptEngine />
           </motion.div>
         } />
       </Routes>
