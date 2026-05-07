@@ -13,9 +13,26 @@ export interface NeuralBlueprint {
   product_name?: string;
   mission_statement?: string;
   absolute_prompt: string;
+  xml_prompt?: string;
+  yaml_prompt?: string;
   amplified_problem?: string;
   features?: string[];
   roadmap?: string[];
+  technical_stack?: {
+    frontend: string;
+    backend: string;
+    database: string;
+    schema: string[];
+  };
+  monetization?: {
+    model: string;
+    pricing_tiers: string[];
+    gtm_strategy: string[];
+  };
+  design_tokens?: {
+    colors: string[];
+    typography: string;
+  };
   stats: {
     complexity: number;
     tokens?: number;
@@ -106,18 +123,23 @@ export const runNeuralScan = async (concept: string, imageBase64?: string, userD
 export const runStartupArchitect = async (niche: string, problem: string, concept: string): Promise<NeuralBlueprint> => {
   try {
     const parts: any[] = [{
-      text: `You are a Senior Product Architect. Build a startup blueprint for:
+      text: `You are a Senior Product Architect & Startup Founder. Build a high-fidelity startup blueprint for:
       Niche: ${niche}
       Problem: ${problem}
       Concept: ${concept}
 
-      Return JSON with:
-      - product_name: High-end branding
-      - mission_statement: Professional & Ambitious
-      - absolute_prompt: The core architectural prompt
-      - features: [Array of 3 core features]
-      - roadmap: [Array of 3 phases]
-      - stats: { market_fit: "High/Med/Low", complexity: "Level 1-10", scalability: "Percentage" }`
+      Your goal is to provide an un-neglectable, actionable blueprint that a creator can use to start building today.
+      
+      Return a JSON object with:
+      - product_name: High-end branding name
+      - mission_statement: Ambitious & precise
+      - absolute_prompt: The core architectural prompt for the AI to understand this vision
+      - features: [Array of 3 core features with {name, description}]
+      - roadmap: [Array of 3 phases with {name, description}]
+      - technical_stack: { frontend, backend, database, schema: [Array of table/collection descriptions] }
+      - monetization: { model, pricing_tiers: [Array], gtm_strategy: [Array of 3 steps] }
+      - design_tokens: { colors: [Array of 3 HEX codes], typography: "Font mood" }
+      - stats: { market_fit: "Percentage", complexity: 1-10, scalability: "Percentage" }`
     }];
 
     const response = await generateWithFallback(parts, true);

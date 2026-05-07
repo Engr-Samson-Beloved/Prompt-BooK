@@ -16,6 +16,7 @@ import Ticker from './components/Ticker';
 import ConnectModal from './components/ConnectModal';
 import CustomCursor from './components/CustomCursor';
 import Pricing from './components/Pricing';
+import HireAgent from './components/HireAgent';
 
 const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
   const location = useLocation();
@@ -42,6 +43,16 @@ const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
             transition={{ duration: 0.5 }}
           >
             <Pricing />
+          </motion.div>
+        } />
+        <Route path="/hire-agent" element={
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <HireAgent />
           </motion.div>
         } />
         <Route path="/services" element={
