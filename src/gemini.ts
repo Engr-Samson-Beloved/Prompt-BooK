@@ -164,8 +164,16 @@ export const runStartupArchitect = async (niche: string, problem: string, concep
  * FEATURE #3: CONVERSATIONAL EXPERT
  * Real-time chat for brand consultation.
  */
+let lastSuccessfulModel: string | null = null;
+
 export const runConversationalExpert = async (message: string, history: any[] = [], brandContext: {name: string, vision: string} = {name: '', vision: ''}): Promise<string> => {
   const models = ["gemini-2.0-flash-lite", "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
+  
+  // Reorder models to try the last successful one first
+  const prioritizedModels = lastSuccessfulModel 
+    ? [lastSuccessfulModel, ...models.filter(m => m !== lastSuccessfulModel)]
+    : models;
+
   let lastError = null;
 
   const systemInstruction = `You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. 
@@ -173,7 +181,7 @@ export const runConversationalExpert = async (message: string, history: any[] = 
   VISION: ${brandContext.vision}
   Be professional, elite, and precise. Reference their project name occasionally. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity.`;
 
-  for (const modelName of models) {
+  for (const modelName of prioritizedModels) {
     try {
       // Construct the conversation contents with system context and history
       const contents = [
@@ -188,6 +196,7 @@ export const runConversationalExpert = async (message: string, history: any[] = 
         contents: contents
       });
 
+      lastSuccessfulModel = modelName; // Stick to this model for the rest of the session
       return response.text || "";
     } catch (err) {
       lastError = err;
