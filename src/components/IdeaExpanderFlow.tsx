@@ -339,10 +339,15 @@ const IdeaExpanderFlow: React.FC = () => {
                           <div>
                             <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Core_Feature_Matrix</span>
                             <div className="space-y-2">
-                              {result.features?.map(f => (
-                                <div key={f} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-neutral-100 text-[10px] font-mono text-brand-black uppercase">
-                                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                                  {f}
+                              {result.features?.map((f: any, i) => (
+                                <div key={i} className="p-3 bg-white rounded-xl border border-neutral-100 text-[10px] font-mono text-brand-black uppercase">
+                                  <div className="flex items-center gap-3 mb-1">
+                                    <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                                    <span className="font-bold">{typeof f === 'object' ? f.name : f}</span>
+                                  </div>
+                                  {typeof f === 'object' && f.description && (
+                                    <p className="text-[9px] text-neutral-400 font-sans normal-case ml-6">{f.description}</p>
+                                  )}
                                 </div>
                               ))}
                             </div>
@@ -351,10 +356,18 @@ const IdeaExpanderFlow: React.FC = () => {
                           <div>
                             <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Execution_Roadmap</span>
                             <div className="space-y-2">
-                              {result.roadmap?.map((p, i) => (
-                                <p key={i} className="text-neutral-500 font-sans text-xs leading-relaxed">
-                                  {p}
-                                </p>
+                              {result.roadmap?.map((p: any, i) => (
+                                <div key={i} className="mb-2">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <div className="w-1.5 h-1.5 bg-brand-accent rounded-full" />
+                                    <span className="text-[10px] font-mono font-bold text-brand-black uppercase">
+                                      {typeof p === 'object' ? p.name || p.phase : `Phase ${i+1}`}
+                                    </span>
+                                  </div>
+                                  <p className="text-neutral-500 font-sans text-xs leading-relaxed ml-3">
+                                    {typeof p === 'object' ? p.description || p.goal : p}
+                                  </p>
+                                </div>
                               ))}
                             </div>
                           </div>
