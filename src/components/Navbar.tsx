@@ -9,9 +9,7 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Features', path: '/services' },
-    { name: 'Carousel', path: '/portfolio' },
-    { name: 'Experience', path: '/experience' },
-    { name: 'Generate', path: '/generate' },
+    { name: 'Templates', path: '/portfolio' },
     { name: 'Get Access', path: '/pricing' },
   ];
 
