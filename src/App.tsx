@@ -23,8 +23,8 @@ const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+    <AnimatePresence mode="wait" key={location.pathname}>
+      <Routes location={location}>
         <Route path="/" element={
           <motion.div
             initial={{ opacity: 0 }}
