@@ -165,23 +165,27 @@ export const runStartupArchitect = async (niche: string, problem: string, concep
  * Real-time chat for brand consultation.
  */
 export const runConversationalExpert = async (message: string, history: any[] = []): Promise<string> => {
-  const models = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-flash-8b"];
+  const models = ["gemini-2.0-flash-lite", "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
   let lastError = null;
+
+  const systemInstruction = "You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. Be professional, elite, and precise. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity.";
 
   for (const modelName of models) {
     try {
-      const model = genAI.getGenerativeModel({ 
+      // Construct the conversation contents with system context and history
+      const contents = [
+        { role: "user", parts: [{ text: systemInstruction }] },
+        { role: "model", parts: [{ text: "Acknowledged. Establishing neural link. I am K-7." }] },
+        ...history,
+        { role: "user", parts: [{ text: message }] }
+      ];
+
+      const response = await genAI.models.generateContent({
         model: modelName,
-        systemInstruction: "You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. Be professional, elite, and precise. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity."
+        contents: contents
       });
 
-      const chat = model.startChat({
-        history: history,
-      });
-
-      const result = await chat.sendMessage(message);
-      const response = await result.response;
-      return response.text();
+      return response.text || "";
     } catch (err) {
       lastError = err;
       console.warn(`⚠️ Conversational Expert: Model ${modelName} failed, trying next...`);

@@ -144,6 +144,17 @@ const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean, col
     }
 
     return () => {
+      // Cleanup for memory efficiency and WebGL stability
+      scene.traverse((object) => {
+        if (object instanceof THREE.Mesh) {
+          object.geometry.dispose();
+          if (Array.isArray(object.material)) {
+            object.material.forEach(m => m.dispose());
+          } else {
+            object.material.dispose();
+          }
+        }
+      });
       renderer.dispose();
       if (containerRef.current) containerRef.current.removeChild(renderer.domElement);
     };
