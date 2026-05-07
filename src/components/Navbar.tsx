@@ -10,7 +10,6 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
     { name: 'Home', path: '/' },
     { name: 'Features', path: '/services' },
     { name: 'Carousel', path: '/portfolio' },
-    { name: 'Experience', path: '/experience' },
     { name: 'Generate', path: '/generate' },
     { name: 'Get Access', path: '/pricing' },
   ];
