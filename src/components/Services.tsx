@@ -4,6 +4,7 @@ import { Scan, Expand, LayoutGrid, ArrowLeftRight, Network, Lock, ArrowUpRight, 
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import ReversePromptFlow from './ReversePromptFlow';
+import IdeaExpanderFlow from './IdeaExpanderFlow';
 
 const services = [
   {
@@ -128,13 +129,13 @@ const Services: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) =
       </div>
 
       <AnimatePresence>
-        {activeFeature === 'reverse-engine' && (
+        {(activeFeature === 'reverse-engine' || activeFeature === 'expander') && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="fixed inset-0 bg-white/95 backdrop-blur-md z-[1000]" />
             <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="fixed inset-0 z-[1001] flex items-center justify-center p-6 pointer-events-none">
               <div className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl pointer-events-auto relative p-12 lg:p-20 border border-neutral-100">
                 <button onClick={() => setActiveFeature(null)} className="absolute top-10 right-10 p-3 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-brand-black"><X className="w-6 h-6" /></button>
-                <ReversePromptFlow />
+                {activeFeature === 'reverse-engine' ? <ReversePromptFlow /> : <IdeaExpanderFlow />}
               </div>
             </motion.div>
           </>
