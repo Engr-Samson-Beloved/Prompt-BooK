@@ -6,9 +6,11 @@ import { runConversationalExpert } from '../gemini';
 interface VoiceExpertSessionProps {
   onClose: () => void;
   onComplete: (data: any) => void;
+  brandName: string;
+  brandVision: string;
 }
 
-const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComplete }) => {
+const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComplete, brandName, brandVision }) => {
   const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -52,7 +54,11 @@ const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComp
     }, 1000);
 
     // Initial greeting
-    speak("I am K-7. Neural link established. Describe your vision for the brand.");
+    const greeting = brandName 
+      ? `I am K-7. Neural link established for project ${brandName}. I've analyzed your vision to ${brandVision.substring(0, 50)}... Tell me more about the core values behind this.`
+      : "I am K-7. Neural link established. Describe your vision for the brand.";
+      
+    speak(greeting);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);

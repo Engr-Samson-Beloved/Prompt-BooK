@@ -582,6 +582,8 @@ const HireAgent: React.FC = () => {
           <VoiceExpertSession 
             onClose={() => setShowVoiceSession(false)} 
             onComplete={handleVoiceSessionComplete} 
+            brandName={brandInfo.name}
+            brandVision={brandInfo.vision}
           />
         )}
       </AnimatePresence>
