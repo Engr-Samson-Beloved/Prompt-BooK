@@ -1,29 +1,28 @@
-import { OpenAI } from "openai";
-
-const openai = new OpenAI({
-  // Vite looks into your .env file for this specific name
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true 
-});
-
-export const getAbsolutePrompt = async (subject: string, style: string) => {
+export const getAbsolutePrompt = async (
+  subject: string,
+  style: string
+) => {
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o", 
-      messages: [
-        { 
-          role: "system", 
-          content: "You are a master prompt engineer. Take the user's input and expand it into a high-end Midjourney prompt. Return ONLY a JSON object with the field 'refined'." 
+    const response = await fetch(
+      "http://localhost:3001/api/generate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        { role: "user", content: `Subject: ${subject}, Style: ${style}` }
-      ],
-      response_format: { type: "json_object" } 
-    });
+        body: JSON.stringify({
+          subject,
+          style,
+        }),
+      }
+    );
 
-    const data = JSON.parse(completion.choices[0].message.content || "{}");
-    return data.refined; 
+    const data = await response.json();
+
+    return data.result;
+
   } catch (error) {
-    console.error("API Error:", error);
-    return "Error: Check your API credits or key!";
+    console.error("Frontend API Error:", error);
+    return "Something went wrong.";
   }
 };
