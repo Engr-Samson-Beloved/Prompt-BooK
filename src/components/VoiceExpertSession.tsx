@@ -64,8 +64,8 @@ const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComp
   const speak = (text: string) => {
     setAiResponse(text);
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.pitch = 0.8;
-    utterance.rate = 0.9;
+    utterance.pitch = 0.9;
+    utterance.rate = 1.0;
     
     // Optional: Try to find a premium sounding voice
     const voices = window.speechSynthesis.getVoices();
