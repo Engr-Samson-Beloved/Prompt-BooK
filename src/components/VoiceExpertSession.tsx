@@ -89,6 +89,8 @@ const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComp
   };
 
   const processVoiceInput = async (text: string) => {
+    if (!text || text.trim().length === 0) return;
+    
     setIsThinking(true);
     setAiResponse('Processing patterns...');
     
