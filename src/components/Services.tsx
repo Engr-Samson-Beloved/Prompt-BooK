@@ -75,7 +75,7 @@ const FeatureCard: React.FC<{ service: typeof services[0], idx: number, onOpen: 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: idx * 0.1 }}
-      className="glass-card p-10 flex flex-col relative overflow-hidden cursor-pointer group border border-neutral-100 hover:border-brand-accent/20 transition-colors"
+      className="glass-card p-6 md:p-10 flex flex-col relative overflow-hidden cursor-pointer group border border-neutral-100 hover:border-brand-accent/20 transition-colors"
       style={{ transformStyle: 'preserve-3d' }}
     >
       <div ref={spotlightRef} className="absolute w-[200px] h-[200px] bg-brand-accent/5 blur-3xl rounded-full pointer-events-none opacity-0" />
@@ -104,14 +104,14 @@ const Services: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) =
           <Zap className="w-3 h-3 text-brand-accent" />
           Neural Infrastructure
         </motion.div>
-        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-display mb-4 text-center tracking-tighter">
+        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl sm:text-5xl md:text-7xl font-display mb-4 text-center tracking-tighter">
           Core <span className="text-brand-accent">Capabilities</span>
         </motion.h2>
         <p className="text-neutral-500 text-center max-w-lg font-sans">Autonomous modules designed to bridge the gap between imagination and production.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="bg-brand-black rounded-[2.5rem] p-12 flex flex-col justify-between text-white relative overflow-hidden group shadow-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} className="bg-brand-black rounded-[2rem] md:rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between text-white relative overflow-hidden group shadow-2xl">
           <div className="relative z-10">
             <h3 className="text-4xl font-display mb-6 max-w-[200px] leading-tight">Get started with promptBook</h3>
             <button onClick={onOpenConnect} className="px-10 py-4 bg-white text-brand-black rounded-full font-mono font-bold uppercase tracking-widest text-xs hover:bg-brand-accent hover:text-white transition-all shadow-xl">INITIALIZE_SYNC</button>
@@ -132,9 +132,9 @@ const Services: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) =
         {(activeFeature === 'reverse-engine' || activeFeature === 'expander') && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="fixed inset-0 bg-white/95 backdrop-blur-md z-[1000]" />
-            <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="fixed inset-0 z-[1001] flex items-center justify-center p-6 pointer-events-none">
-              <div className="bg-white w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-[3rem] shadow-2xl pointer-events-auto relative p-12 lg:p-20 border border-neutral-100">
-                <button onClick={() => setActiveFeature(null)} className="absolute top-10 right-10 p-3 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-brand-black"><X className="w-6 h-6" /></button>
+            <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="fixed inset-0 z-[1001] flex items-center justify-center p-4 md:p-6 pointer-events-none">
+              <div className="bg-white w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-[2rem] md:rounded-[3rem] shadow-2xl pointer-events-auto relative p-6 md:p-12 lg:p-20 border border-neutral-100">
+                <button onClick={() => setActiveFeature(null)} className="absolute top-6 md:top-10 right-6 md:right-10 p-2 md:p-3 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-brand-black"><X className="w-5 h-5 md:w-6 md:h-6" /></button>
                 {activeFeature === 'reverse-engine' ? <ReversePromptFlow /> : <IdeaExpanderFlow />}
               </div>
             </motion.div>

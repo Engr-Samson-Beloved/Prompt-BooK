@@ -51,7 +51,7 @@ const Pricing: React.FC = () => {
           <CreditCard className="w-4 h-4 text-brand-accent" />
           Neural Fueling Options
         </div>
-        <h2 className="text-5xl md:text-7xl font-display mb-6 tracking-tighter">
+        <h2 className="text-4xl sm:text-5xl md:text-7xl font-display mb-6 tracking-tighter">
           CHOOSE YOUR <span className="text-brand-accent">VELOCITY</span>
         </h2>
         <p className="text-neutral-500 text-lg max-w-2xl mx-auto font-sans">
@@ -66,9 +66,9 @@ const Pricing: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className={`relative flex flex-col p-8 rounded-[2rem] border transition-all duration-500 ${
+            className={`relative flex flex-col p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-500 ${
               plan.highlight 
-                ? 'bg-brand-black text-white border-brand-black shadow-2xl scale-105 z-10' 
+                ? 'bg-brand-black text-white border-brand-black shadow-2xl md:scale-105 z-10' 
                 : 'bg-white text-brand-black border-neutral-100 hover:border-brand-accent/30'
             }`}
           >

@@ -30,7 +30,7 @@ const Portfolio: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-6xl md:text-8xl font-display tracking-tighter uppercase"
+          className="text-4xl sm:text-6xl md:text-8xl font-display tracking-tighter uppercase"
         >
           YOUR <span className="text-brand-accent">BLUEPRINTS</span>
         </motion.h2>
@@ -45,7 +45,7 @@ const Portfolio: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ delay: idx * 0.05 }}
-              className="group bg-white border border-neutral-100 rounded-[2.5rem] p-8 hover:border-brand-accent transition-all shadow-sm hover:shadow-2xl hover:shadow-brand-accent/5"
+              className="group bg-white border border-neutral-100 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-8 hover:border-brand-accent transition-all shadow-sm hover:shadow-2xl hover:shadow-brand-accent/5"
             >
               <div className="flex flex-col h-full text-left">
                 <div className="flex items-center justify-between mb-6">
@@ -90,7 +90,7 @@ const Portfolio: React.FC = () => {
       </div>
 
       <div className="mb-16">
-        <h3 className="text-3xl font-display uppercase tracking-tighter mb-12">Visual <span className="text-neutral-300">Inspiration</span></h3>
+        <h3 className="text-2xl md:text-3xl font-display uppercase tracking-tighter mb-8 md:mb-12">Visual <span className="text-neutral-300">Inspiration</span></h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
           {staticProjects.map((project, idx) => (
             <motion.div
@@ -100,7 +100,7 @@ const Portfolio: React.FC = () => {
               transition={{ delay: idx * 0.1 }}
               className="group cursor-pointer"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[2.5rem] bg-neutral-100 mb-6">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] bg-neutral-100 mb-6">
                 <img 
                   src={project.image} 
                   alt={project.title}
@@ -113,7 +113,7 @@ const Portfolio: React.FC = () => {
               </div>
               <div>
                 <span className="text-xs font-mono font-bold text-neutral-400 uppercase tracking-[0.2em]">{project.category}</span>
-                <h3 className="text-3xl font-display mt-2 text-brand-black">{project.title}</h3>
+                <h3 className="text-2xl md:text-3xl font-display mt-2 text-brand-black">{project.title}</h3>
               </div>
             </motion.div>
           ))}

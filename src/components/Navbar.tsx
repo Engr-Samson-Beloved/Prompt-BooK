@@ -36,11 +36,11 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
   }, []);
 
   return (
-    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-fit px-4">
+    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-fit px-4 md:px-0">
       <motion.nav 
         layout
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="pill-nav p-2 shadow-2xl flex items-center gap-2 sm:gap-1.5 bg-white/90 backdrop-blur-xl border border-neutral-100 rounded-full overflow-hidden"
+        className="pill-nav p-1.5 md:p-2 shadow-2xl flex items-center gap-1 sm:gap-1.5 bg-white/90 backdrop-blur-xl border border-neutral-100 rounded-full overflow-hidden"
       >
         {navLinks.map((link, i) => (
           <NavLink
@@ -48,10 +48,10 @@ const Navbar: React.FC<NavbarProps> = ({ onOpenConnect }) => {
             to={link.path}
             className={({ isActive }) =>
               `relative flex items-center rounded-full transition-colors duration-500 whitespace-nowrap ${
-                isActive 
+                  isActive 
                   ? 'bg-brand-black text-white shadow-lg' 
                   : 'text-neutral-500 hover:text-brand-black hover:bg-neutral-50'
-              } ${explainingIndex === i ? 'px-6 py-3.5' : 'p-4 sm:p-3'}`
+              } ${explainingIndex === i ? 'px-4 md:px-6 py-2.5 md:py-3.5' : 'p-3 md:p-4'}`
             }
           >
             <div className="flex items-center">
