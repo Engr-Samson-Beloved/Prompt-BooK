@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2 } from 'lucide-react';
 
-const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean }> = ({ isCalling, isHovered }) => {
+const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean, color?: string }> = ({ isCalling, isHovered, color = "#ffcc00" }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean }> =
 
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    const pointLight = new THREE.PointLight(0xffcc00, 2);
+    const pointLight = new THREE.PointLight(new THREE.Color(color), 2);
     pointLight.position.set(5, 5, 5);
     scene.add(ambientLight, pointLight);
 
@@ -44,7 +44,7 @@ const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean }> =
     const visorGeo = new THREE.BoxGeometry(1.6, 0.2, 0.5);
     const visorMat = new THREE.MeshStandardMaterial({ 
       color: 0x000000, 
-      emissive: 0xffcc00, 
+      emissive: new THREE.Color(color), 
       emissiveIntensity: 1 
     });
     const visor = new THREE.Mesh(visorGeo, visorMat);
@@ -108,7 +108,7 @@ const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean }> =
       gsap.to(visorMat, { emissiveIntensity: 5, color: 0xff0000, duration: 0.5 });
       gsap.to(robotGroup.rotation, { y: Math.PI * 2, duration: 2, ease: "power2.inOut" });
     } else {
-      gsap.to(visorMat, { emissiveIntensity: 1, color: 0x000000, duration: 0.5 });
+      gsap.to(visorMat, { emissiveIntensity: 1, color: new THREE.Color(color), duration: 0.5 });
     }
 
     if (isHovered) {
@@ -123,7 +123,7 @@ const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean }> =
       renderer.dispose();
       if (containerRef.current) containerRef.current.removeChild(renderer.domElement);
     };
-  }, [isCalling, isHovered]);
+  }, [isCalling, isHovered, color]);
 
   return <div ref={containerRef} className="w-full h-full" />;
 };
@@ -137,7 +137,7 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
       setDisplayedText(text.slice(0, i));
       i++;
       if (i > text.length) clearInterval(timer);
-    }, 30);
+    }, 20);
     return () => clearInterval(timer);
   }, [text]);
 
@@ -145,20 +145,43 @@ const TypewriterText: React.FC<{ text: string }> = ({ text }) => {
 };
 
 const HireAgent: React.FC = () => {
+  const [activeAgent, setActiveAgent] = useState<'brand' | 'social'>('brand');
   const [activeStep, setActiveStep] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [brandInfo, setBrandInfo] = useState({ name: '', vision: '', audience: '' });
 
-  const steps = [
-    { id: 'identity', label: 'Brand_Identity', description: 'What is the designation of your venture?' },
-    { id: 'vision', label: 'Core_Vision', description: 'Describe the world your brand intends to build.' },
-    { id: 'audience', label: 'Neural_Target', description: 'Who are the primary biological nodes you are targeting?' },
-    { id: 'link', label: 'Neural_Link', description: 'Finalize engagement via direct communication.' }
-  ];
+  const agents = {
+    brand: {
+      name: 'K-7 BRAND ARCHITECT',
+      color: '#ffcc00',
+      tagline: 'High-fidelity brand DNA construction.',
+      manifesto: 'I am K-7. In the era of AGI, traditional branding is obsolete. Why spend weeks and thousands on slow human iterations? I architect high-fidelity brand DNA in seconds with 99.8% semantic accuracy.',
+      steps: [
+        { id: 'identity', label: 'Brand_Identity', description: 'What is the designation of your venture?' },
+        { id: 'vision', label: 'Core_Vision', description: 'Describe the world your brand intends to build.' },
+        { id: 'audience', label: 'Neural_Target', description: 'Who are the primary biological nodes you are targeting?' },
+        { id: 'link', label: 'Neural_Link', description: 'Finalize engagement via direct communication.' }
+      ]
+    },
+    social: {
+      name: 'S-4 SOCIAL TWIN',
+      color: '#00ccff',
+      tagline: 'Autonomous communication & customer sync.',
+      manifesto: 'I am S-4. I handle the stress of human interaction so you don\'t have to. I manage your Gmail, WhatsApp, and Social platforms with zero latency. I am fast, accurate, and execute with absolute autonomy.',
+      steps: [
+        { id: 'sync', label: 'Platform_Sync', description: 'Connect your Gmail and WhatsApp channels.' },
+        { id: 'tone', label: 'Voice_Calibration', description: 'How should I respond to your customers?' },
+        { id: 'auth', label: 'Neural_Scan', description: 'Scan the QR code to grant autonomous access.' },
+        { id: 'active', label: 'Live_Execution', description: 'I am now managing your social ecosystem.' }
+      ]
+    }
+  };
+
+  const currentAgent = agents[activeAgent];
 
   const handleNext = () => {
-    if (activeStep < steps.length - 1) setActiveStep(activeStep + 1);
+    if (activeStep < currentAgent.steps.length - 1) setActiveStep(activeStep + 1);
   };
 
   const startCall = () => {
@@ -227,21 +250,42 @@ const HireAgent: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Agent Interface: Brand Expert */}
+      {/* Main Agent Interface */}
       <section className="max-w-7xl mx-auto px-6 pb-32">
+        
+        {/* Agent Selector Tabs */}
+        <div className="flex justify-center mb-16">
+          <div className="inline-flex p-1.5 bg-neutral-100 rounded-2xl border border-neutral-200">
+            {(['brand', 'social'] as const).map((key) => (
+              <button
+                key={key}
+                onClick={() => { setActiveAgent(key); setActiveStep(0); }}
+                className={`px-8 py-3 rounded-xl font-mono text-xs font-bold uppercase tracking-widest transition-all ${
+                  activeAgent === key 
+                    ? 'bg-white text-brand-black shadow-sm' 
+                    : 'text-neutral-400 hover:text-neutral-600'
+                }`}
+              >
+                {key === 'brand' ? 'Brand Architect' : 'Social Twin'}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           {/* Agent Visual Side (3D Robotic Agent) */}
           <motion.div 
+            key={activeAgent}
             initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            animate={{ opacity: 1, scale: 1 }}
             className="relative group/agent"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border border-neutral-100 aspect-square bg-white flex items-center justify-center cursor-help">
               <div className="absolute inset-0 z-0">
-                <RoboticAgentVisual isCalling={isCalling} isHovered={isHovered} />
+                <RoboticAgentVisual isCalling={isCalling} isHovered={isHovered} color={currentAgent.color} />
               </div>
               
               {/* Typewriter Overlay */}
@@ -253,11 +297,11 @@ const HireAgent: React.FC = () => {
                     exit={{ opacity: 0 }}
                     className="absolute inset-0 z-10 bg-brand-black/90 backdrop-blur-sm p-12 flex flex-col justify-center text-left"
                   >
-                    <span className="text-brand-accent font-mono text-[10px] font-bold uppercase tracking-[0.3em] mb-4">Neural_Manifesto_v1.0</span>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.3em] mb-4" style={{ color: currentAgent.color }}>Neural_Manifesto_v1.0</span>
                     <p className="text-white font-mono text-base leading-relaxed tracking-tight">
-                      <TypewriterText text="I am K-7. In the era of AGI, traditional branding is obsolete. Why spend weeks and thousands on slow human iterations? I architect high-fidelity brand DNA in seconds with 99.8% semantic accuracy. Fast. Efficient. Unignorable. My designs are not just art—they are mathematical certainties of market fit." />
+                      <TypewriterText text={currentAgent.manifesto} />
                     </p>
-                    <div className="mt-8 flex items-center gap-2 text-brand-accent font-mono text-[10px] font-bold uppercase">
+                    <div className="mt-8 flex items-center gap-2 font-mono text-[10px] font-bold uppercase" style={{ color: currentAgent.color }}>
                       <Zap className="w-3 h-3" /> Efficiency_Index: 99.8%
                     </div>
                   </motion.div>
@@ -267,10 +311,10 @@ const HireAgent: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent pointer-events-none" />
               <div className="absolute inset-x-0 bottom-0 p-12 bg-gradient-to-t from-white to-transparent pointer-events-none">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-3 h-3 bg-brand-accent rounded-full animate-pulse" />
+                  <div className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: currentAgent.color }} />
                   <span className="font-mono text-xs text-neutral-400 uppercase tracking-widest font-bold">Neural_Status: Active</span>
                 </div>
-                <h2 className="text-4xl font-display text-brand-black uppercase tracking-tight">K-7 BRAND ARCHITECT</h2>
+                <h2 className="text-4xl font-display text-brand-black uppercase tracking-tight">{currentAgent.name}</h2>
               </div>
             </div>
             
@@ -280,7 +324,7 @@ const HireAgent: React.FC = () => {
               transition={{ duration: 4, repeat: Infinity }}
               className="absolute -top-8 -right-8 p-6 bg-white shadow-2xl rounded-3xl border border-neutral-100 max-w-[200px] hidden md:block z-10"
             >
-              <Zap className="w-6 h-6 text-brand-accent mb-3" />
+              <Zap className="w-6 h-6 mb-3" style={{ color: currentAgent.color }} />
               <span className="block text-[10px] font-mono text-neutral-400 uppercase mb-1">Processing_Speed</span>
               <span className="text-xl font-display">4.2 TB/s</span>
             </motion.div>
@@ -289,17 +333,17 @@ const HireAgent: React.FC = () => {
           {/* Interaction Flow Side */}
           <div className="flex flex-col">
             <div className="mb-12">
-              <span className="text-brand-accent font-mono text-sm font-bold uppercase tracking-[0.3em] mb-4 block">Deployment_Phase_01</span>
-              <h3 className="text-5xl font-display uppercase tracking-tighter mb-6">THE BRAND <span className="text-neutral-300 italic">DISCOVERY.</span></h3>
+              <span className="font-mono text-sm font-bold uppercase tracking-[0.3em] mb-4 block" style={{ color: currentAgent.color }}>Deployment_Phase_0{activeStep + 1}</span>
+              <h3 className="text-5xl font-display uppercase tracking-tighter mb-6">{currentAgent.tagline.split(' ')[0]} <span className="text-neutral-300 italic">{currentAgent.tagline.split(' ').slice(1).join(' ')}</span></h3>
               <p className="text-neutral-500 text-lg leading-relaxed">
-                The K-7 Architect requires high-fidelity metadata to construct your brand DNA. Follow the neural sequence below.
+                Provide high-fidelity metadata to construct your agentic DNA. Follow the neural sequence below.
               </p>
             </div>
 
-            <div className="relative p-10 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 min-h-[400px] flex flex-col">
+            <div className="relative p-10 bg-neutral-50 rounded-[2.5rem] border border-neutral-100 min-h-[420px] flex flex-col">
               {/* Step Indicators */}
               <div className="flex gap-2 mb-10">
-                {steps.map((s, idx) => (
+                {currentAgent.steps.map((s, idx) => (
                   <div 
                     key={s.id}
                     className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${idx <= activeStep ? 'bg-brand-black' : 'bg-neutral-200'}`}
@@ -309,50 +353,95 @@ const HireAgent: React.FC = () => {
 
               <AnimatePresence mode="wait">
                 <motion.div 
-                  key={activeStep}
+                  key={`${activeAgent}-${activeStep}`}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   className="flex-grow"
                 >
-                  <div className="mb-8">
-                    <span className="font-mono text-xs font-bold text-neutral-400 uppercase tracking-widest block mb-2">{steps[activeStep].label}</span>
-                    <h4 className="text-3xl font-display text-brand-black uppercase tracking-tight">{steps[activeStep].description}</h4>
+                  <div className="mb-8 text-left">
+                    <span className="font-mono text-xs font-bold text-neutral-400 uppercase tracking-widest block mb-2">{currentAgent.steps[activeStep].label}</span>
+                    <h4 className="text-3xl font-display text-brand-black uppercase tracking-tight leading-tight">{currentAgent.steps[activeStep].description}</h4>
                   </div>
 
-                  {activeStep === 0 && (
-                    <input 
-                      type="text" 
-                      placeholder="Enter Brand Name..." 
-                      className="w-full bg-white border border-neutral-200 rounded-2xl px-6 py-5 font-sans text-lg focus:outline-none focus:border-brand-accent transition-all shadow-inner"
-                      value={brandInfo.name}
-                      onChange={(e) => setBrandInfo({...brandInfo, name: e.target.value})}
-                    />
-                  )}
+                  {activeAgent === 'brand' ? (
+                    <>
+                      {activeStep === 0 && (
+                        <input 
+                          type="text" 
+                          placeholder="Enter Brand Name..." 
+                          className="w-full bg-white border border-neutral-200 rounded-2xl px-6 py-5 font-sans text-lg focus:outline-none focus:border-brand-accent transition-all shadow-inner"
+                          value={brandInfo.name}
+                          onChange={(e) => setBrandInfo({...brandInfo, name: e.target.value})}
+                        />
+                      )}
 
-                  {activeStep === 1 && (
-                    <textarea 
-                      placeholder="Our vision is to..." 
-                      className="w-full bg-white border border-neutral-200 rounded-2xl px-6 py-5 font-sans text-lg focus:outline-none focus:border-brand-accent transition-all h-32 resize-none shadow-inner"
-                      value={brandInfo.vision}
-                      onChange={(e) => setBrandInfo({...brandInfo, vision: e.target.value})}
-                    />
-                  )}
+                      {activeStep === 1 && (
+                        <textarea 
+                          placeholder="Our vision is to..." 
+                          className="w-full bg-white border border-neutral-200 rounded-2xl px-6 py-5 font-sans text-lg focus:outline-none focus:border-brand-accent transition-all h-32 resize-none shadow-inner"
+                          value={brandInfo.vision}
+                          onChange={(e) => setBrandInfo({...brandInfo, vision: e.target.value})}
+                        />
+                      )}
 
-                  {activeStep === 2 && (
-                    <div className="space-y-6">
-                      <div className="flex gap-4">
-                        <button onClick={startCall} className="flex-1 py-5 bg-brand-black text-white rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-neutral-800 transition-all shadow-lg">
-                          <Phone className="w-4 h-4" /> CALL_NOW
-                        </button>
-                        <button onClick={handleNext} className="flex-1 py-5 bg-white border border-neutral-200 text-brand-black rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:border-brand-accent transition-all shadow-sm">
-                          <Calendar className="w-4 h-4" /> SCHEDULE
-                        </button>
-                      </div>
-                      <p className="text-center text-xs font-mono text-neutral-400 uppercase tracking-widest italic leading-relaxed px-8">
-                        "I am ready to process your vocal patterns and expectations." — K-7
-                      </p>
-                    </div>
+                      {activeStep === 2 && (
+                        <div className="space-y-6">
+                          <div className="flex gap-4">
+                            <button onClick={startCall} className="flex-1 py-5 bg-brand-black text-white rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-neutral-800 transition-all shadow-lg">
+                              <Phone className="w-4 h-4" /> CALL_NOW
+                            </button>
+                            <button onClick={handleNext} className="flex-1 py-5 bg-white border border-neutral-200 text-brand-black rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:border-brand-accent transition-all shadow-sm">
+                              <Calendar className="w-4 h-4" /> SCHEDULE
+                            </button>
+                          </div>
+                          <p className="text-center text-xs font-mono text-neutral-400 uppercase tracking-widest italic leading-relaxed px-8">
+                            "I am ready to process your vocal patterns and expectations." — K-7
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {activeStep === 0 && (
+                        <div className="grid grid-cols-2 gap-4">
+                          <button onClick={handleNext} className="p-6 bg-white border border-neutral-200 rounded-2xl hover:border-brand-accent transition-all text-left">
+                            <Globe className="w-6 h-6 mb-3 text-brand-accent" />
+                            <span className="block font-bold text-sm">GMAIL_SYNC</span>
+                            <span className="text-[10px] text-neutral-400">Manage Communications</span>
+                          </button>
+                          <button onClick={handleNext} className="p-6 bg-white border border-neutral-200 rounded-2xl hover:border-brand-accent transition-all text-left">
+                            <MessageSquare className="w-6 h-6 mb-3 text-emerald-500" />
+                            <span className="block font-bold text-sm">WHATSAPP_LINK</span>
+                            <span className="text-[10px] text-neutral-400">Instant Response</span>
+                          </button>
+                        </div>
+                      )}
+
+                      {activeStep === 1 && (
+                        <div className="space-y-4">
+                          <div className="p-4 bg-white border border-neutral-200 rounded-xl flex items-center justify-between">
+                            <span className="text-sm font-bold">Formal_Professional</span>
+                            <div className="w-4 h-4 rounded-full border-2 border-brand-accent bg-brand-accent" />
+                          </div>
+                          <div className="p-4 bg-white border border-neutral-200 rounded-xl flex items-center justify-between opacity-50">
+                            <span className="text-sm font-bold">Friendly_Conversational</span>
+                            <div className="w-4 h-4 rounded-full border-2 border-neutral-200" />
+                          </div>
+                        </div>
+                      )}
+
+                      {activeStep === 2 && (
+                        <div className="flex flex-col items-center justify-center py-4">
+                          <div className="w-32 h-32 bg-white p-4 border border-neutral-200 rounded-2xl mb-6 flex items-center justify-center">
+                            <div className="grid grid-cols-3 gap-2 opacity-20">
+                              {[...Array(9)].map((_, i) => <div key={i} className="w-4 h-4 bg-black" />)}
+                            </div>
+                          </div>
+                          <p className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest animate-pulse">Waiting_for_QR_Scan...</p>
+                        </div>
+                      )}
+                    </>
                   )}
 
                   {activeStep === 3 && (
@@ -360,16 +449,22 @@ const HireAgent: React.FC = () => {
                       <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
                         <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                       </div>
-                      <div>
-                        <h5 className="text-2xl font-display uppercase mb-2">NEURAL_SYNC_COMPLETE</h5>
-                        <p className="text-neutral-500 text-base">The Brand Architect has finalized your session. Deployment scheduled for:</p>
-                        <div className="mt-4 p-4 bg-brand-black text-white rounded-2xl font-mono text-xl font-bold tracking-[0.2em]">
-                          MAY_12_2026 // 10:00_GMT
+                      <div className="text-left bg-white border border-neutral-100 rounded-2xl p-6 space-y-3">
+                        <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Execution_Feed</span>
+                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Replied to 12 Gmail Threads
+                        </div>
+                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Synced 3 WhatsApp Broadcasts
+                        </div>
+                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Social Plan Drafted
                         </div>
                       </div>
                       <button 
                         onClick={() => setActiveStep(0)}
-                        className="text-[10px] font-mono font-bold text-brand-accent uppercase tracking-widest hover:gap-4 flex items-center gap-2 mx-auto transition-all"
+                        className="text-[10px] font-mono font-bold uppercase tracking-widest hover:gap-4 flex items-center gap-2 mx-auto transition-all"
+                        style={{ color: currentAgent.color }}
                       >
                         RESTART_PROTOCOL <ArrowRight className="w-3 h-3" />
                       </button>
@@ -378,7 +473,7 @@ const HireAgent: React.FC = () => {
                 </motion.div>
               </AnimatePresence>
 
-              {activeStep < 2 && (
+              {activeStep < (activeAgent === 'social' && activeStep === 2 ? 3 : 2) && (
                 <button 
                   onClick={handleNext}
                   className="mt-8 py-5 bg-brand-black text-white rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-brand-accent transition-all group"
