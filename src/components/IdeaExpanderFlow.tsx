@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Type, Sparkles, BrainCircuit, Share2, Zap, Send, CheckCircle2, ChevronRight, Binary, Scan, Layers, LayoutGrid } from 'lucide-react';
+import { Type, Sparkles, BrainCircuit, Share2, Zap, Send, CheckCircle2, ChevronRight, Binary, Scan, Layers, LayoutGrid, Loader2 } from 'lucide-react';
 import gsap from 'gsap';
+import { runStartupArchitect, NeuralBlueprint } from '../gemini';
 
 const niches = [
   { id: 'arch', label: 'Architecture', icon: <Scan className="w-4 h-4" /> },
@@ -15,6 +16,8 @@ const IdeaExpanderFlow: React.FC = () => {
   const [niche, setNiche] = useState('arch');
   const [problem, setProblem] = useState('');
   const [concept, setConcept] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] = useState<NeuralBlueprint | null>(null);
   const neuralMapRef = useRef<SVGSVGElement>(null);
 
   const steps = [
@@ -24,11 +27,46 @@ const IdeaExpanderFlow: React.FC = () => {
     { id: 'result', label: 'Refined Output', icon: <Sparkles className="w-5 h-5" /> }
   ];
 
-  const handleStartExpansion = () => {
+  // PERSISTENCE: Save/Load Startup Blueprints
+  useEffect(() => {
+    const saved = localStorage.getItem('startup_architect_draft');
+    if (saved) {
+      const { result, niche, problem, concept } = JSON.parse(saved);
+      setResult(result);
+      setNiche(niche);
+      setProblem(problem);
+      setConcept(concept);
+      setStep(3); // Jump to result
+    }
+  }, []);
+
+  useEffect(() => {
+    if (result) {
+      localStorage.setItem('startup_architect_draft', JSON.stringify({ result, niche, problem, concept }));
+    }
+  }, [result, niche, problem, concept]);
+
+  const handleStartExpansion = async () => {
     if (!concept || !problem) return;
+    setIsLoading(true);
     setStep(1);
-    setTimeout(() => setStep(2), 2500);
-    setTimeout(() => setStep(3), 5500);
+    
+    try {
+      // Simulate analysis steps for UX
+      setTimeout(() => setStep(2), 2500);
+      
+      const blueprint = await runStartupArchitect(niche, problem, concept);
+      setResult(blueprint);
+      
+      setTimeout(() => {
+        setStep(3);
+        setIsLoading(false);
+      }, 5500);
+    } catch (error) {
+      console.error("Expansion failed:", error);
+      setIsLoading(false);
+      setStep(0);
+    }
   };
 
   useEffect(() => {
@@ -43,21 +81,33 @@ const IdeaExpanderFlow: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Step Indicator */}
-      <div className="flex items-center justify-between mb-16 relative px-4">
+      {/* Progress Timeline */}
+      <div className="flex items-center justify-between mb-16 px-4 relative max-w-sm mx-auto">
         <div className="absolute top-1/2 left-0 w-full h-[1px] bg-neutral-100 -z-10" />
         {steps.map((s, i) => (
-          <div key={s.id} className="flex flex-col items-center gap-3">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-500 border ${
-              step >= i ? 'bg-brand-black border-brand-black text-white shadow-xl' : 'bg-white border-neutral-200 text-neutral-300'
-            }`}>
+          <div key={s.id} className="relative">
+            <motion.div 
+              animate={step === i && isLoading ? {
+                scale: [1, 1.2, 1],
+                opacity: [1, 0.5, 1],
+              } : {}}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border relative ${
+                step >= i ? 'bg-brand-black border-brand-black text-white shadow-xl shadow-black/20' : 'bg-white border-neutral-200 text-neutral-400'
+              }`}
+            >
               {step > i ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : s.icon}
-            </div>
-            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${
-              step >= i ? 'text-brand-black' : 'text-neutral-400'
-            }`}>
-              {s.label}
-            </span>
+              
+              {/* Active Ring */}
+              {step === i && (
+                <motion.div 
+                  layoutId="activeRing"
+                  className="absolute -inset-1 border border-brand-accent rounded-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                />
+              )}
+            </motion.div>
           </div>
         ))}
       </div>
@@ -262,9 +312,9 @@ const IdeaExpanderFlow: React.FC = () => {
                     </div>
                   )}
 
-                   {step === 3 && (
-                    <div className="space-y-6">
-                      <h2 className="text-4xl font-display tracking-tighter uppercase">PRODUCT <span className="text-brand-accent">BLUEPRINT</span></h2>
+                   {step === 3 && result && (
+                    <div className="space-y-6 text-left">
+                      <h2 className="text-4xl font-display tracking-tighter uppercase text-center">PRODUCT <span className="text-brand-accent">BLUEPRINT</span></h2>
                       <div className="p-8 bg-neutral-50 rounded-3xl border border-brand-accent/20 relative group overflow-hidden mb-6">
                         <div className="absolute top-0 right-0 p-4 opacity-5">
                           <LayoutGrid className="w-12 h-12" />
@@ -276,12 +326,12 @@ const IdeaExpanderFlow: React.FC = () => {
                               <Zap className="w-5 h-5 text-brand-accent" />
                             </div>
                             <div>
-                              <h4 className="text-xl font-display text-brand-black">Nexus_Core v1.0</h4>
+                              <h4 className="text-xl font-display text-brand-black">{result.product_name || 'Nexus_Core'}</h4>
                               <span className="text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Brand_Identity</span>
                             </div>
                           </div>
                           <p className="text-brand-black font-sans text-sm italic leading-relaxed border-l-2 border-brand-accent/30 pl-4">
-                            "An autonomous infrastructure layer for deep-space logistics, solving the visual and structural cohesion challenges of glass-based orbital colonies."
+                            "{result.mission_statement}"
                           </p>
                         </div>
 
@@ -289,11 +339,7 @@ const IdeaExpanderFlow: React.FC = () => {
                           <div>
                             <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Core_Feature_Matrix</span>
                             <div className="space-y-2">
-                              {[
-                                'Real-time Refractive Simulation Engine',
-                                'Automated Structural Integrity Verification',
-                                'Volumetric Light Mapping for Deep-Space'
-                              ].map(f => (
+                              {result.features?.map(f => (
                                 <div key={f} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-neutral-100 text-[10px] font-mono text-brand-black uppercase">
                                   <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                                   {f}
@@ -304,9 +350,13 @@ const IdeaExpanderFlow: React.FC = () => {
                           
                           <div>
                             <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Execution_Roadmap</span>
-                            <p className="text-neutral-500 font-sans text-xs leading-relaxed">
-                              Phase 1: Neural mapping of glass physics. Phase 2: Deployment of autonomous drone surveyors. Phase 3: Commercial orbital licensing.
-                            </p>
+                            <div className="space-y-2">
+                              {result.roadmap?.map((p, i) => (
+                                <p key={i} className="text-neutral-500 font-sans text-xs leading-relaxed">
+                                  {p}
+                                </p>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -314,9 +364,9 @@ const IdeaExpanderFlow: React.FC = () => {
                       {/* Startup Stats Grid */}
                       <div className="grid grid-cols-3 gap-4 mb-8">
                         {[
-                          { label: 'Market Fit', value: 'High' },
-                          { label: 'Complexity', value: 'Level 8' },
-                          { label: 'Scalability', value: '94%' }
+                          { label: 'Market Fit', value: result.stats.market_fit },
+                          { label: 'Complexity', value: result.stats.complexity },
+                          { label: 'Scalability', value: result.stats.scalability }
                         ].map(stat => (
                           <div key={stat.label} className="p-4 bg-white border border-neutral-100 rounded-2xl text-center">
                             <span className="block text-[8px] font-mono text-neutral-400 uppercase tracking-widest mb-1">{stat.label}</span>
@@ -333,7 +383,7 @@ const IdeaExpanderFlow: React.FC = () => {
                           EXPORT_STARTUP_DOC (.MD)
                         </button>
                         <button 
-                          onClick={() => setStep(0)}
+                          onClick={() => { setStep(0); setResult(null); }}
                           className="px-8 py-4 bg-neutral-100 text-brand-black font-mono font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-neutral-200 transition-all"
                         >
                           RESTART
