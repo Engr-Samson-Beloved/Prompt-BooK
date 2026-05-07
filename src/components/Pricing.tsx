@@ -47,8 +47,8 @@ const Pricing: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-20"
       >
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 mb-6 font-mono text-[10px] text-neutral-500 uppercase tracking-widest">
-          <CreditCard className="w-3 h-3 text-brand-accent" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 mb-6 font-mono text-xs text-neutral-500 uppercase tracking-widest">
+          <CreditCard className="w-4 h-4 text-brand-accent" />
           Neural Fueling Options
         </div>
         <h2 className="text-5xl md:text-7xl font-display mb-6 tracking-tighter">
@@ -73,18 +73,18 @@ const Pricing: React.FC = () => {
             }`}
           >
             {plan.highlight && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-accent text-white text-[10px] font-mono font-bold px-4 py-1 rounded-full uppercase tracking-widest">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brand-accent text-white text-xs font-mono font-bold px-4 py-1 rounded-full uppercase tracking-widest">
                 Recommended
               </div>
             )}
 
             <div className="mb-8">
-              <h3 className="text-xl font-display mb-2">{plan.name}</h3>
+              <h3 className="text-2xl font-display mb-2">{plan.name}</h3>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-display font-bold">{plan.price}</span>
-                {plan.period && <span className={`text-sm font-mono ${plan.highlight ? 'text-neutral-400' : 'text-neutral-400'}`}>{plan.period}</span>}
+                <span className="text-5xl font-display font-bold">{plan.price}</span>
+                {plan.period && <span className={`text-base font-mono ${plan.highlight ? 'text-neutral-400' : 'text-neutral-400'}`}>{plan.period}</span>}
               </div>
-              <p className={`mt-4 text-sm font-sans leading-relaxed ${plan.highlight ? 'text-neutral-400' : 'text-neutral-500'}`}>
+              <p className={`mt-4 text-base font-sans leading-relaxed ${plan.highlight ? 'text-neutral-400' : 'text-neutral-500'}`}>
                 {plan.description}
               </p>
             </div>
@@ -93,16 +93,16 @@ const Pricing: React.FC = () => {
               {plan.features.map((feature) => (
                 <div key={feature} className="flex items-center gap-3">
                   <div className={`p-1 rounded-full ${plan.highlight ? 'bg-white/10' : 'bg-neutral-50'}`}>
-                    <Check className={`w-3 h-3 ${plan.highlight ? 'text-brand-accent' : 'text-brand-accent'}`} />
+                    <Check className={`w-3.5 h-3.5 ${plan.highlight ? 'text-brand-accent' : 'text-brand-accent'}`} />
                   </div>
-                  <span className={`text-xs font-mono tracking-tight ${plan.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}>
+                  <span className={`text-sm font-mono tracking-tight ${plan.highlight ? 'text-neutral-300' : 'text-neutral-600'}`}>
                     {feature}
                   </span>
                 </div>
               ))}
             </div>
 
-            <button className={`w-full py-4 rounded-xl font-mono font-bold uppercase tracking-widest text-xs transition-all ${
+            <button className={`w-full py-4 rounded-xl font-mono font-bold uppercase tracking-widest text-sm transition-all ${
               plan.highlight 
                 ? 'bg-brand-accent text-white hover:opacity-90' 
                 : 'bg-neutral-100 text-brand-black hover:bg-brand-black hover:text-white'
@@ -115,14 +115,14 @@ const Pricing: React.FC = () => {
 
       {/* Trust Badges */}
       <div className="mt-24 pt-12 border-t border-neutral-100 flex flex-wrap justify-center gap-12 opacity-40 grayscale">
-        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest">
-          <Shield className="w-4 h-4" /> Secure Checkout
+        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest">
+          <Shield className="w-5 h-5" /> Secure Checkout
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest">
-          <Zap className="w-4 h-4" /> Instant Activation
+        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest">
+          <Zap className="w-5 h-5" /> Instant Activation
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest">
-          <Sparkles className="w-4 h-4" /> Satisfaction Guaranteed
+        <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest">
+          <Sparkles className="w-5 h-5" /> Satisfaction Guaranteed
         </div>
       </div>
     </section>
