@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2, Download, ExternalLink, Users, Target, Search } from 'lucide-react';
 import { runStartupArchitect, NeuralBlueprint } from '../gemini';
 import { generateBrandConstitution } from '../services/ExportService';
+import VoiceExpertSession from './VoiceExpertSession';
 
 const MoodboardGrid: React.FC<{ prompts: string[], colors: string[] }> = ({ prompts, colors }) => {
   return (
@@ -171,6 +172,7 @@ const HireAgent: React.FC = () => {
   const [activeAgent, setActiveAgent] = useState<'brand' | 'social'>('brand');
   const [activeStep, setActiveStep] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
+  const [showVoiceSession, setShowVoiceSession] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [brandInfo, setBrandInfo] = useState({ name: '', vision: '', audience: '' });
@@ -223,11 +225,15 @@ const HireAgent: React.FC = () => {
   };
 
   const startCall = () => {
-    setIsCalling(true);
-    setTimeout(() => {
-      setIsCalling(false);
-      handleGenerate();
-    }, 4000);
+    setShowVoiceSession(true);
+  };
+
+  const handleVoiceSessionComplete = (history: any[]) => {
+    setShowVoiceSession(false);
+    // Combine history into vision for better generation
+    const visionFromCall = history.map(h => h.parts[0].text).join(' ');
+    setBrandInfo(prev => ({ ...prev, vision: visionFromCall }));
+    handleGenerate();
   };
 
   return (
@@ -561,7 +567,17 @@ const HireAgent: React.FC = () => {
 
       {/* Call Overlay Simulation */}
       <AnimatePresence>
-        {(isCalling || isGenerating) && (
+        {showVoiceSession && (
+          <VoiceExpertSession 
+            onClose={() => setShowVoiceSession(false)} 
+            onComplete={handleVoiceSessionComplete} 
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Synthesis Overlay (Still used for non-voice generation) */}
+      <AnimatePresence>
+        {isGenerating && !showVoiceSession && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -579,16 +595,12 @@ const HireAgent: React.FC = () => {
                 </div>
               </motion.div>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-brand-accent text-white text-[10px] font-mono font-bold uppercase tracking-widest rounded-full shadow-lg">
-                {isGenerating ? 'SYNTHESIS_ACTIVE' : 'LINK_ACTIVE'}
+                SYNTHESIS_ACTIVE
               </div>
             </div>
             
-            <h3 className="text-4xl font-display uppercase tracking-widest mb-4">
-              {isGenerating ? 'Neural_Synthesis_' : 'Neural_Session_'}
-            </h3>
-            <p className="text-neutral-400 font-mono text-sm uppercase tracking-[0.2em] mb-12">
-              {isGenerating ? 'Constructing high-fidelity brand DNA...' : 'Analyzing biological vocal patterns...'}
-            </p>
+            <h3 className="text-4xl font-display uppercase tracking-widest mb-4">Neural_Synthesis_</h3>
+            <p className="text-neutral-400 font-mono text-sm uppercase tracking-[0.2em] mb-12">Constructing high-fidelity brand DNA...</p>
             
             <div className="flex gap-4">
               <motion.div 

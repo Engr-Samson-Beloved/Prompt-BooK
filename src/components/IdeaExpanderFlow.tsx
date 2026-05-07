@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { runStartupArchitect } from '../gemini';
 import { useVault, NeuralBlueprint } from '../contexts/VaultContext';
 import { useNavigate } from 'react-router-dom';
+import { generateBrandConstitution } from '../services/ExportService';
 
 const niches = [
   { id: 'arch', label: 'Architecture', icon: <Scan className="w-4 h-4" /> },
@@ -499,10 +500,16 @@ const IdeaExpanderFlow: React.FC = () => {
                           <Save className="w-4 h-4" /> Save_to_Vault
                         </button>
                         <button 
+                          onClick={() => result && generateBrandConstitution(result)}
+                          className="px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:border-brand-accent transition-all"
+                        >
+                          <Download className="w-4 h-4" /> Export_PDF
+                        </button>
+                        <button 
                           onClick={() => handleExportMarkdown(result)}
                           className="px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:border-brand-accent transition-all"
                         >
-                          <Download className="w-4 h-4" /> Export_Blueprint
+                          <Download className="w-4 h-4" /> Export_MD
                         </button>
                       </div>
 
