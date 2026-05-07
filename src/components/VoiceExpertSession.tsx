@@ -101,7 +101,7 @@ const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComp
     setAiResponse('Processing patterns...');
     
     try {
-      const response = await runConversationalExpert(text, history);
+      const response = await runConversationalExpert(text, history, { name: brandName, vision: brandVision });
       setHistory([...history, { role: 'user', parts: [{ text }] }, { role: 'model', parts: [{ text: response }] }]);
       speak(response);
     } catch (error) {
