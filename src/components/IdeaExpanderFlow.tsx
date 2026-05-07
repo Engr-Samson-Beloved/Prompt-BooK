@@ -1,22 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Type, Sparkles, BrainCircuit, Share2, Zap, Send, CheckCircle2, ChevronRight, Binary } from 'lucide-react';
+import { Type, Sparkles, BrainCircuit, Share2, Zap, Send, CheckCircle2, ChevronRight, Binary, Scan, Layers, LayoutGrid } from 'lucide-react';
 import gsap from 'gsap';
 
+const niches = [
+  { id: 'arch', label: 'Architecture', icon: <Scan className="w-4 h-4" /> },
+  { id: 'prod', label: 'Product Design', icon: <Zap className="w-4 h-4" /> },
+  { id: 'char', label: 'Character', icon: <Share2 className="w-4 h-4" /> },
+  { id: 'env', label: 'Environment', icon: <Layers className="w-4 h-4" /> }
+];
+
 const IdeaExpanderFlow: React.FC = () => {
-  const [step, setStep] = useState(0); // 0: Input, 1: Semantic Analysis, 2: Neural Expansion, 3: Refined Result
-  const [input, setInput] = useState('');
+  const [step, setStep] = useState(0); 
+  const [niche, setNiche] = useState('arch');
+  const [problem, setProblem] = useState('');
+  const [concept, setConcept] = useState('');
   const neuralMapRef = useRef<SVGSVGElement>(null);
 
   const steps = [
-    { id: 'input', label: 'Rough Concept', icon: <Type className="w-5 h-5" /> },
+    { id: 'context', label: 'Contextual Input', icon: <Type className="w-5 h-5" /> },
     { id: 'analyze', label: 'Semantic Parse', icon: <Binary className="w-5 h-5" /> },
     { id: 'expand', label: 'Neural Branching', icon: <BrainCircuit className="w-5 h-5" /> },
     { id: 'result', label: 'Refined Output', icon: <Sparkles className="w-5 h-5" /> }
   ];
 
   const handleStartExpansion = () => {
-    if (!input) return;
+    if (!concept || !problem) return;
     setStep(1);
     setTimeout(() => setStep(2), 2500);
     setTimeout(() => setStep(3), 5500);
@@ -61,26 +70,53 @@ const IdeaExpanderFlow: React.FC = () => {
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full p-10 flex flex-col items-center"
+                className="w-full h-full p-10 overflow-y-auto flex flex-col"
               >
-                <div className="w-20 h-20 bg-white rounded-3xl shadow-sm border border-neutral-100 flex items-center justify-center mb-8">
-                  <Type className="w-8 h-8 text-neutral-300" />
+                <div className="mb-8">
+                  <label className="block font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-4">Target Niche</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {niches.map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => setNiche(n.id)}
+                        className={`flex items-center gap-3 p-3 rounded-xl border text-[10px] font-mono font-bold uppercase tracking-widest transition-all ${
+                          niche === n.id ? 'bg-brand-black text-white border-brand-black' : 'bg-white text-neutral-400 border-neutral-100 hover:border-brand-accent'
+                        }`}
+                      >
+                        {n.icon} {n.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="text-2xl font-display mb-4">Input Rough Concept</h3>
-                <textarea 
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="e.g. A city made of glass in space"
-                  className="w-full p-6 bg-white border border-neutral-100 rounded-2xl font-sans text-sm focus:border-brand-accent/50 outline-none transition-all shadow-sm mb-8"
-                  rows={3}
-                />
+
+                <div className="mb-6">
+                  <label className="block font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-2">Problem Statement</label>
+                  <input 
+                    value={problem}
+                    onChange={(e) => setProblem(e.target.value)}
+                    placeholder="e.g. Need high-contrast lighting for a mood board..."
+                    className="w-full p-4 bg-white border border-neutral-100 rounded-xl font-sans text-xs focus:border-brand-accent outline-none"
+                  />
+                </div>
+
+                <div className="mb-8">
+                  <label className="block font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-2">Core Concept</label>
+                  <textarea 
+                    value={concept}
+                    onChange={(e) => setConcept(e.target.value)}
+                    placeholder="Describe your raw idea..."
+                    className="w-full p-4 bg-white border border-neutral-100 rounded-xl font-sans text-xs focus:border-brand-accent outline-none"
+                    rows={2}
+                  />
+                </div>
+
                 <button 
                   onClick={handleStartExpansion}
-                  disabled={!input}
-                  className="px-10 py-4 bg-brand-black text-white font-mono font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-brand-accent transition-all flex items-center gap-3 disabled:opacity-20"
+                  disabled={!concept || !problem}
+                  className="mt-auto px-10 py-4 bg-brand-black text-white font-mono font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-brand-accent transition-all flex items-center justify-center gap-3 disabled:opacity-20 shadow-xl shadow-black/10"
                 >
                   <BrainCircuit className="w-4 h-4" />
-                  INITIATE_EXPANSION
+                  INITIALIZE_SYNTHESIS
                 </button>
               </motion.div>
             )}
@@ -125,7 +161,7 @@ const IdeaExpanderFlow: React.FC = () => {
               >
                 <svg ref={neuralMapRef} className="w-full h-full" viewBox="0 0 200 200">
                   <path d="M100 100 L60 60 M100 100 L140 60 M100 100 L60 140 M100 100 L140 140" stroke="#3b82f6" strokeWidth="0.5" fill="none" opacity="0.3" />
-                  <motion.circle cx="100" cy="100" r="4" fill="#3b82f6" animate={{ r: [4, 6, 4] }} transition={{ repeat: Infinity }} />
+                  <motion.circle cx="100" cy="100" initial={{ r: 4 }} fill="#3b82f6" animate={{ r: [4, 6, 4] }} transition={{ repeat: Infinity }} />
                   {/* Branch nodes */}
                   {[60, 140].map(x => [60, 140].map(y => (
                     <motion.g key={`${x}-${y}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
@@ -226,19 +262,81 @@ const IdeaExpanderFlow: React.FC = () => {
                     </div>
                   )}
 
-                  {step === 3 && (
+                   {step === 3 && (
                     <div className="space-y-6">
-                      <h2 className="text-4xl font-display tracking-tighter">EXPANDED <span className="text-brand-accent">PROMPT</span></h2>
-                      <div className="p-8 bg-brand-accent/5 border border-brand-accent/20 rounded-[2rem] relative">
-                        <Sparkles className="absolute top-4 right-4 w-6 h-6 text-brand-accent opacity-20" />
-                        <p className="font-mono text-sm leading-relaxed text-brand-black italic">
-                          "Cinematic wide shot of a monolithic crystalline megacity suspended in a nebula-rich vacuum, intricate glass architecture with complex refractive caustics, floating debris, iridium plated docking bays, volumetric interstellar dust, hyper-realistic, shot on IMAX 70mm --v 6.0"
-                        </p>
+                      <h2 className="text-4xl font-display tracking-tighter uppercase">PRODUCT <span className="text-brand-accent">BLUEPRINT</span></h2>
+                      <div className="p-8 bg-neutral-50 rounded-3xl border border-brand-accent/20 relative group overflow-hidden mb-6">
+                        <div className="absolute top-0 right-0 p-4 opacity-5">
+                          <LayoutGrid className="w-12 h-12" />
+                        </div>
+                        
+                        <div className="mb-8">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-brand-black rounded-xl flex items-center justify-center">
+                              <Zap className="w-5 h-5 text-brand-accent" />
+                            </div>
+                            <div>
+                              <h4 className="text-xl font-display text-brand-black">Nexus_Core v1.0</h4>
+                              <span className="text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Brand_Identity</span>
+                            </div>
+                          </div>
+                          <p className="text-brand-black font-sans text-sm italic leading-relaxed border-l-2 border-brand-accent/30 pl-4">
+                            "An autonomous infrastructure layer for deep-space logistics, solving the visual and structural cohesion challenges of glass-based orbital colonies."
+                          </p>
+                        </div>
+
+                        <div className="space-y-6">
+                          <div>
+                            <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Core_Feature_Matrix</span>
+                            <div className="space-y-2">
+                              {[
+                                'Real-time Refractive Simulation Engine',
+                                'Automated Structural Integrity Verification',
+                                'Volumetric Light Mapping for Deep-Space'
+                              ].map(f => (
+                                <div key={f} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-neutral-100 text-[10px] font-mono text-brand-black uppercase">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                                  {f}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <span className="block text-[9px] font-mono font-bold text-brand-accent uppercase tracking-widest mb-3">Execution_Roadmap</span>
+                            <p className="text-neutral-500 font-sans text-xs leading-relaxed">
+                              Phase 1: Neural mapping of glass physics. Phase 2: Deployment of autonomous drone surveyors. Phase 3: Commercial orbital licensing.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Startup Stats Grid */}
+                      <div className="grid grid-cols-3 gap-4 mb-8">
+                        {[
+                          { label: 'Market Fit', value: 'High' },
+                          { label: 'Complexity', value: 'Level 8' },
+                          { label: 'Scalability', value: '94%' }
+                        ].map(stat => (
+                          <div key={stat.label} className="p-4 bg-white border border-neutral-100 rounded-2xl text-center">
+                            <span className="block text-[8px] font-mono text-neutral-400 uppercase tracking-widest mb-1">{stat.label}</span>
+                            <span className="text-sm font-bold text-brand-black">{stat.value}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-4">
                         <button 
-                          className="mt-8 flex items-center gap-3 px-6 py-3 bg-brand-black text-white rounded-xl font-mono text-[10px] uppercase tracking-widest hover:bg-brand-accent transition-all"
+                          className="flex-1 px-8 py-4 bg-brand-black text-white font-mono font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-brand-accent transition-all flex items-center justify-center gap-3"
                         >
-                          <Send className="w-4 h-4" />
-                          DEPLOY_TO_MJ
+                          <Share2 className="w-4 h-4" />
+                          EXPORT_STARTUP_DOC (.MD)
+                        </button>
+                        <button 
+                          onClick={() => setStep(0)}
+                          className="px-8 py-4 bg-neutral-100 text-brand-black font-mono font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-neutral-200 transition-all"
+                        >
+                          RESTART
                         </button>
                       </div>
                     </div>
