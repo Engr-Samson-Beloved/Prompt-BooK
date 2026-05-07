@@ -33,6 +33,13 @@ export interface NeuralBlueprint {
     colors: string[];
     typography: string;
   };
+  market_gap?: string;
+  psychographics?: {
+    persona: string;
+    pain_points: string[];
+    triggers: string[];
+  };
+  moodboard_prompts?: string[];
   stats: {
     complexity: number;
     tokens?: number;
@@ -134,6 +141,9 @@ export const runStartupArchitect = async (niche: string, problem: string, concep
       - product_name: High-end branding name
       - mission_statement: Ambitious & precise
       - absolute_prompt: The core architectural prompt for the AI to understand this vision
+      - market_gap: Analysis of why this needs to exist NOW
+      - psychographics: { persona: "Ideal customer", pain_points: [], triggers: ["What makes them buy"] }
+      - moodboard_prompts: [Array of 4 high-fidelity Midjourney prompts for the brand atmosphere]
       - features: [Array of 3 core features with {name, description}]
       - roadmap: [Array of 3 phases with {name, description}]
       - technical_stack: { frontend, backend, database, schema: [Array of table/collection descriptions] }

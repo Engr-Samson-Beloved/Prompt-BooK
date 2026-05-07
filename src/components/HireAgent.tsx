@@ -2,7 +2,30 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2, Download, ExternalLink, Users, Target, Search } from 'lucide-react';
+import { runStartupArchitect, NeuralBlueprint } from '../gemini';
+import { generateBrandConstitution } from '../services/ExportService';
+
+const MoodboardGrid: React.FC<{ prompts: string[], colors: string[] }> = ({ prompts, colors }) => {
+  return (
+    <div className="grid grid-cols-2 gap-4 mt-8">
+      {prompts.slice(0, 4).map((prompt, idx) => (
+        <div key={idx} className="relative group aspect-square rounded-2xl overflow-hidden bg-neutral-100 border border-neutral-200">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+            <Sparkles className="w-6 h-6 text-neutral-300 mb-2 group-hover:text-brand-accent transition-colors" />
+            <p className="text-[8px] font-mono text-neutral-400 uppercase leading-tight opacity-0 group-hover:opacity-100 transition-opacity">
+              {prompt.substring(0, 60)}...
+            </p>
+          </div>
+          {/* Placeholder for real AI image generation integration */}
+          <div className="absolute bottom-3 right-3 flex gap-1">
+             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors[idx % colors.length] }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const RoboticAgentVisual: React.FC<{ isCalling: boolean, isHovered: boolean, color?: string }> = ({ isCalling, isHovered, color = "#ffcc00" }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -149,7 +172,9 @@ const HireAgent: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isCalling, setIsCalling] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [brandInfo, setBrandInfo] = useState({ name: '', vision: '', audience: '' });
+  const [blueprint, setBlueprint] = useState<NeuralBlueprint | null>(null);
 
   const agents = {
     brand: {
@@ -184,12 +209,24 @@ const HireAgent: React.FC = () => {
     if (activeStep < currentAgent.steps.length - 1) setActiveStep(activeStep + 1);
   };
 
+  const handleGenerate = async () => {
+    setIsGenerating(true);
+    try {
+      const result = await runStartupArchitect(brandInfo.audience, brandInfo.vision, brandInfo.name);
+      setBlueprint(result);
+      setActiveStep(3);
+    } catch (error) {
+      console.error("Failed to generate blueprint:", error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const startCall = () => {
     setIsCalling(true);
     setTimeout(() => {
-      // Simulation: After call, move to final date assignment
       setIsCalling(false);
-      setActiveStep(3);
+      handleGenerate();
     }, 4000);
   };
 
@@ -449,22 +486,49 @@ const HireAgent: React.FC = () => {
                       <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
                         <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                       </div>
-                      <div className="text-left bg-white border border-neutral-100 rounded-2xl p-6 space-y-3">
-                        <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Execution_Feed</span>
-                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Replied to 12 Gmail Threads
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                        <div className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-sm space-y-6">
+                           <div>
+                              <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2">Neural_Blueprint</span>
+                              <h5 className="text-3xl font-display uppercase tracking-tight text-brand-black">{blueprint?.product_name || "PROTOTYPE_v1"}</h5>
+                              <p className="text-sm text-neutral-500 mt-2 italic">"{blueprint?.mission_statement}"</p>
+                           </div>
+
+                           <div className="space-y-4">
+                              <div className="flex items-start gap-4">
+                                <div className="p-2 bg-neutral-50 rounded-lg"><Search className="w-4 h-4 text-brand-accent" /></div>
+                                <div>
+                                   <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Market_Gap</span>
+                                   <p className="text-xs text-brand-black font-medium">{blueprint?.market_gap || "Analyzing scarcity patterns..."}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-start gap-4">
+                                <div className="p-2 bg-neutral-50 rounded-lg"><Target className="w-4 h-4 text-emerald-500" /></div>
+                                <div>
+                                   <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Neural_Target</span>
+                                   <p className="text-xs text-brand-black font-medium">{blueprint?.psychographics?.persona || "Biological nodes mapped."}</p>
+                                </div>
+                              </div>
+                           </div>
+
+                           <button 
+                              onClick={() => blueprint && generateBrandConstitution(blueprint)}
+                              className="w-full py-4 bg-brand-black text-white rounded-2xl font-mono text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-neutral-800 transition-all group"
+                           >
+                              <Download className="w-4 h-4 group-hover:translate-y-1 transition-transform" /> EXPORT_CONSTITUTION_PDF
+                           </button>
                         </div>
-                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Synced 3 WhatsApp Broadcasts
-                        </div>
-                        <div className="flex items-center gap-3 text-xs font-mono text-brand-black">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-500" /> Social Plan Drafted
+
+                        <div className="bg-neutral-50 border border-neutral-200 rounded-3xl p-8">
+                           <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-4">Aesthetic_Moodboard</span>
+                           <MoodboardGrid prompts={blueprint?.moodboard_prompts || []} colors={blueprint?.design_tokens?.colors || ['#ffcc00', '#000', '#fff']} />
                         </div>
                       </div>
+
                       <button 
-                        onClick={() => setActiveStep(0)}
-                        className="text-[10px] font-mono font-bold uppercase tracking-widest hover:gap-4 flex items-center gap-2 mx-auto transition-all"
-                        style={{ color: currentAgent.color }}
+                        onClick={() => { setActiveStep(0); setBlueprint(null); }}
+                        className="text-[10px] font-mono font-bold uppercase tracking-widest hover:gap-4 flex items-center gap-2 mx-auto transition-all text-neutral-400"
                       >
                         RESTART_PROTOCOL <ArrowRight className="w-3 h-3" />
                       </button>
@@ -475,10 +539,19 @@ const HireAgent: React.FC = () => {
 
               {activeStep < (activeAgent === 'social' && activeStep === 2 ? 3 : 2) && (
                 <button 
-                  onClick={handleNext}
-                  className="mt-8 py-5 bg-brand-black text-white rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-brand-accent transition-all group"
+                  onClick={activeAgent === 'brand' && activeStep === 2 ? handleGenerate : handleNext}
+                  disabled={isGenerating}
+                  className={`mt-8 py-5 bg-brand-black text-white rounded-2xl font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-3 transition-all group ${isGenerating ? 'opacity-50 cursor-not-allowed' : 'hover:bg-brand-accent'}`}
                 >
-                  NEXT_SEQUENCE <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  {isGenerating ? (
+                    <>
+                      <Zap className="w-4 h-4 animate-pulse" /> SCANNING_DNA...
+                    </>
+                  ) : (
+                    <>
+                      {activeAgent === 'brand' && activeStep === 2 ? 'ARCHITECT_DNA' : 'NEXT_SEQUENCE'} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
                 </button>
               )}
             </div>
@@ -488,7 +561,7 @@ const HireAgent: React.FC = () => {
 
       {/* Call Overlay Simulation */}
       <AnimatePresence>
-        {isCalling && (
+        {(isCalling || isGenerating) && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -506,12 +579,16 @@ const HireAgent: React.FC = () => {
                 </div>
               </motion.div>
               <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-brand-accent text-white text-[10px] font-mono font-bold uppercase tracking-widest rounded-full shadow-lg">
-                LINK_ACTIVE
+                {isGenerating ? 'SYNTHESIS_ACTIVE' : 'LINK_ACTIVE'}
               </div>
             </div>
             
-            <h3 className="text-4xl font-display uppercase tracking-widest mb-4">Neural Session_</h3>
-            <p className="text-neutral-400 font-mono text-sm uppercase tracking-[0.2em] mb-12">Analyzing biological vocal patterns...</p>
+            <h3 className="text-4xl font-display uppercase tracking-widest mb-4">
+              {isGenerating ? 'Neural_Synthesis_' : 'Neural_Session_'}
+            </h3>
+            <p className="text-neutral-400 font-mono text-sm uppercase tracking-[0.2em] mb-12">
+              {isGenerating ? 'Constructing high-fidelity brand DNA...' : 'Analyzing biological vocal patterns...'}
+            </p>
             
             <div className="flex gap-4">
               <motion.div 
