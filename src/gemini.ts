@@ -164,11 +164,14 @@ export const runStartupArchitect = async (niche: string, problem: string, concep
  * FEATURE #3: CONVERSATIONAL EXPERT
  * Real-time chat for brand consultation.
  */
-export const runConversationalExpert = async (message: string, history: any[] = []): Promise<string> => {
+export const runConversationalExpert = async (message: string, history: any[] = [], brandContext: {name: string, vision: string} = {name: '', vision: ''}): Promise<string> => {
   const models = ["gemini-2.0-flash-lite", "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
   let lastError = null;
 
-  const systemInstruction = "You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. Be professional, elite, and precise. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity.";
+  const systemInstruction = `You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. 
+  CURRENT PROJECT: ${brandContext.name}
+  VISION: ${brandContext.vision}
+  Be professional, elite, and precise. Reference their project name occasionally. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity.`;
 
   for (const modelName of models) {
     try {
