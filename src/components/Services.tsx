@@ -132,10 +132,12 @@ const Services: React.FC<{ onOpenConnect?: () => void }> = ({ onOpenConnect }) =
         {(activeFeature === 'reverse-engine' || activeFeature === 'expander') && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setActiveFeature(null)} className="fixed inset-0 bg-white/95 backdrop-blur-md z-[1000]" />
-            <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="fixed inset-0 z-[1001] flex items-center justify-center p-4 md:p-6 pointer-events-none">
-              <div className="bg-white w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-[2rem] md:rounded-[3rem] shadow-2xl pointer-events-auto relative p-6 md:p-12 lg:p-20 border border-neutral-100">
-                <button onClick={() => setActiveFeature(null)} className="absolute top-6 md:top-10 right-6 md:right-10 p-2 md:p-3 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-brand-black"><X className="w-5 h-5 md:w-6 md:h-6" /></button>
-                {activeFeature === 'reverse-engine' ? <ReversePromptFlow /> : <IdeaExpanderFlow />}
+            <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 100 }} className="fixed inset-0 z-[1001] flex items-center justify-center p-2 sm:p-4 md:p-6 pointer-events-none">
+              <div className="bg-white w-full max-w-6xl max-h-[98vh] sm:max-h-[95vh] overflow-y-auto rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] shadow-2xl pointer-events-auto relative p-5 sm:p-8 md:p-12 lg:p-20 border border-neutral-100">
+                <button onClick={() => setActiveFeature(null)} className="absolute top-4 sm:top-6 md:top-10 right-4 sm:right-6 md:right-10 p-2 md:p-3 rounded-full hover:bg-neutral-100 transition-colors text-neutral-400 hover:text-brand-black z-[1002] bg-white/80 backdrop-blur-sm"><X className="w-5 h-5 md:w-6 md:h-6" /></button>
+                <div className="w-full">
+                  {activeFeature === 'reverse-engine' ? <ReversePromptFlow /> : <IdeaExpanderFlow />}
+                </div>
               </div>
             </motion.div>
           </>

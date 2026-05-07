@@ -104,7 +104,7 @@ const IdeaExpanderFlow: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Progress Timeline */}
-      <div className="flex items-center justify-between mb-16 px-4 relative max-w-sm mx-auto">
+      <div className="flex items-center justify-between mb-12 md:mb-16 px-4 relative max-w-[280px] sm:max-w-sm mx-auto">
         <div className="absolute top-1/2 left-0 w-full h-[1px] bg-neutral-100 -z-10" />
         {steps.map((s, i) => (
           <div key={s.id} className="relative">
@@ -114,11 +114,11 @@ const IdeaExpanderFlow: React.FC = () => {
                 opacity: [1, 0.5, 1],
               } : {}}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border relative ${
+              className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 border relative ${
                 step >= i ? 'bg-brand-black border-brand-black text-white shadow-xl shadow-black/20' : 'bg-white border-neutral-200 text-neutral-400'
               }`}
             >
-              {step > i ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : s.icon}
+              {step > i ? <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" /> : <div className="scale-75 md:scale-100">{s.icon}</div>}
               
               {/* Active Ring */}
               {step === i && (
@@ -134,15 +134,15 @@ const IdeaExpanderFlow: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-start">
         {/* Interaction Canvas */}
-        <div className="relative aspect-square bg-neutral-50 rounded-[3rem] border border-neutral-100 overflow-hidden flex items-center justify-center shadow-inner">
+        <div className="relative aspect-square max-h-[350px] sm:max-h-none bg-neutral-50 rounded-[1.5rem] md:rounded-[3rem] border border-neutral-100 overflow-hidden flex items-center justify-center shadow-inner mx-auto w-full">
           <AnimatePresence mode="wait">
             {step === 0 && (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="w-full h-full p-10 overflow-y-auto flex flex-col"
+                className="w-full h-full p-6 md:p-10 overflow-y-auto flex flex-col text-left"
               >
                 <div className="mb-8">
                   <label className="block font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-4">Target Niche</label>
@@ -280,7 +280,7 @@ const IdeaExpanderFlow: React.FC = () => {
                   <Share2 className="w-4 h-4" />
                   <span className="font-mono text-xs font-bold uppercase tracking-widest">Expansion Core</span>
                 </div>
-                <h2 className="text-4xl font-display mb-6 tracking-tighter uppercase leading-tight">AMPLIFY <span className="text-brand-accent">INTENT</span></h2>
+                <h2 className="text-2xl md:text-4xl font-display mb-6 tracking-tighter uppercase leading-tight text-left">AMPLIFY <span className="text-brand-accent">INTENT</span></h2>
                 <div className="space-y-4">
                   <p className="text-neutral-500 text-base leading-relaxed mb-8">
                     Our Idea Expander takes primitive concepts and runs them through a multi-layer semantic transformer to generate cinematic, high-fidelity descriptive prompts.
@@ -316,8 +316,8 @@ const IdeaExpanderFlow: React.FC = () => {
 
                   {step === 2 && (
                     <div className="space-y-4">
-                      <h2 className="text-4xl font-display tracking-tighter">BRANCHING <span className="text-brand-accent">LOGIC</span></h2>
-                      <div className="grid grid-cols-2 gap-4">
+                      <h2 className="text-2xl md:text-4xl font-display tracking-tighter text-left uppercase">BRANCHING <span className="text-brand-accent">LOGIC</span></h2>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {['Volumetric Lighting', 'Refractive Index', 'Zero Gravity', 'Iridium Plating'].map((f, i) => (
                           <motion.div 
                             key={f}
@@ -335,9 +335,9 @@ const IdeaExpanderFlow: React.FC = () => {
                   )}
 
                    {step === 3 && result && (
-                    <div className="space-y-6 text-left">
-                      <h2 className="text-4xl font-display tracking-tighter uppercase text-center">PRODUCT <span className="text-brand-accent">BLUEPRINT</span></h2>
-                      <div className="p-8 bg-neutral-50 rounded-3xl border border-brand-accent/20 relative group overflow-hidden mb-6">
+                     <div className="space-y-6 text-left">
+                      <h2 className="text-2xl md:text-4xl font-display tracking-tighter uppercase text-center">PRODUCT <span className="text-brand-accent">BLUEPRINT</span></h2>
+                      <div className="p-5 md:p-8 bg-neutral-50 rounded-[1.5rem] md:rounded-3xl border border-brand-accent/20 relative group overflow-hidden mb-6">
                         <div className="absolute top-0 right-0 p-4 opacity-5">
                           <LayoutGrid className="w-12 h-12" />
                         </div>
@@ -357,9 +357,9 @@ const IdeaExpanderFlow: React.FC = () => {
                           </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                           {/* Technical DNA */}
-                          <div className="p-6 bg-neutral-900 rounded-3xl border border-white/10 text-left">
+                          <div className="p-6 bg-neutral-900 rounded-[1.5rem] md:rounded-3xl border border-white/10 text-left">
                             <div className="flex items-center gap-3 mb-4">
                               <Code2 className="w-5 h-5 text-brand-accent" />
                               <span className="font-mono text-xs font-bold text-white uppercase tracking-widest">Technical_Architecture</span>
@@ -387,7 +387,7 @@ const IdeaExpanderFlow: React.FC = () => {
                           </div>
 
                           {/* Monetization */}
-                          <div className="p-6 bg-white rounded-3xl border border-neutral-100 text-left">
+                          <div className="p-6 bg-white rounded-[1.5rem] md:rounded-3xl border border-neutral-100 text-left">
                             <div className="flex items-center gap-3 mb-4">
                               <Coins className="w-5 h-5 text-emerald-500" />
                               <span className="font-mono text-xs font-bold text-brand-black uppercase tracking-widest">Revenue_Model</span>
@@ -416,13 +416,13 @@ const IdeaExpanderFlow: React.FC = () => {
                         </div>
 
                         {/* Design Tokens */}
-                        <div className="p-6 bg-brand-accent/5 rounded-3xl border border-brand-accent/20 mb-8 flex items-center justify-between">
-                          <div className="flex items-center gap-6">
+                        <div className="p-5 md:p-6 bg-brand-accent/5 rounded-[1.5rem] md:rounded-3xl border border-brand-accent/20 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-6">
                             <div className="flex items-center gap-2">
                               <Palette className="w-4 h-4 text-brand-accent" />
                               <span className="font-mono text-xs font-bold text-brand-black uppercase">Neural_Palette:</span>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                               {result.design_tokens?.colors.map(c => (
                                 <div key={c} className="flex items-center gap-2 px-2 py-1 bg-white rounded-full border border-neutral-100">
                                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: c }} />
@@ -431,7 +431,7 @@ const IdeaExpanderFlow: React.FC = () => {
                               ))}
                             </div>
                           </div>
-                          <div className="text-right">
+                          <div className="text-left sm:text-right">
                             <span className="block text-[10px] font-mono text-neutral-400 mb-1">TYPOGRAPHY</span>
                             <div className="text-sm font-mono font-bold text-brand-black">{result.design_tokens?.typography}</div>
                           </div>
@@ -477,13 +477,13 @@ const IdeaExpanderFlow: React.FC = () => {
                       </div>
 
                       {/* Startup Stats Grid */}
-                      <div className="grid grid-cols-3 gap-4 mb-12">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
                         {[
                           { label: 'Market Fit', value: result.stats.market_fit, icon: <Globe className="w-3 h-3" /> },
                           { label: 'Complexity', value: result.stats.complexity, icon: <Shield className="w-3 h-3" /> },
                           { label: 'Scalability', value: result.stats.scalability, icon: <LayoutGrid className="w-3 h-3" /> }
                         ].map(stat => (
-                          <div key={stat.label} className="p-4 bg-neutral-50 rounded-2xl border border-neutral-100 flex flex-col items-center">
+                          <div key={stat.label} className="p-4 bg-neutral-50 rounded-[1.2rem] md:rounded-2xl border border-neutral-100 flex flex-col items-center">
                             <div className="text-brand-accent mb-2">{stat.icon}</div>
                             <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-1">{stat.label}</span>
                             <span className="text-base font-display text-brand-black">{stat.value}</span>
@@ -492,25 +492,27 @@ const IdeaExpanderFlow: React.FC = () => {
                       </div>
 
                       {/* Action Bar */}
-                      <div className="flex items-center justify-center gap-4">
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <button 
                           onClick={handleSaveBlueprint}
-                          className="px-6 py-3 bg-brand-black text-white rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-neutral-800 transition-all"
+                          className="w-full sm:w-auto px-6 py-3 bg-brand-black text-white rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-neutral-800 transition-all"
                         >
                           <Save className="w-4 h-4" /> Save_to_Vault
                         </button>
-                        <button 
-                          onClick={() => result && generateBrandConstitution(result)}
-                          className="px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:border-brand-accent transition-all"
-                        >
-                          <Download className="w-4 h-4" /> Export_PDF
-                        </button>
-                        <button 
-                          onClick={() => handleExportMarkdown(result)}
-                          className="px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:border-brand-accent transition-all"
-                        >
-                          <Download className="w-4 h-4" /> Export_MD
-                        </button>
+                        <div className="flex w-full sm:w-auto gap-4">
+                          <button 
+                            onClick={() => result && generateBrandConstitution(result)}
+                            className="flex-1 sm:flex-none px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-brand-accent transition-all"
+                          >
+                            <Download className="w-4 h-4" /> Export_PDF
+                          </button>
+                          <button 
+                            onClick={() => handleExportMarkdown(result)}
+                            className="flex-1 sm:flex-none px-6 py-3 bg-white border border-neutral-200 text-brand-black rounded-xl font-mono text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:border-brand-accent transition-all"
+                          >
+                            <Download className="w-4 h-4" /> Export_MD
+                          </button>
+                        </div>
                       </div>
 
                       <button 
@@ -542,7 +544,7 @@ const IdeaExpanderFlow: React.FC = () => {
             <span className="font-mono text-[10px] text-neutral-400 uppercase tracking-widest">{savedBlueprints.length} Saved Blueprints</span>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {savedBlueprints.map((blueprint) => (
               <div key={blueprint.product_name} className="group p-6 bg-white border border-neutral-100 rounded-3xl hover:border-brand-accent transition-all flex items-center justify-between shadow-sm">
                 <div className="flex flex-col text-left">
