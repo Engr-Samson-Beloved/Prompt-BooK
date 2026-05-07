@@ -27,12 +27,13 @@ const AnimatedRoutes = ({ onOpenConnect }: { onOpenConnect: () => void }) => {
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
             <Hero onOpenConnect={onOpenConnect} />
+            <Services onOpenConnect={onOpenConnect} />
           </motion.div>
         } />
         <Route path="/pricing" element={
