@@ -94,7 +94,7 @@ const ReversePromptFlow: React.FC = () => {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Progress Timeline */}
-      <div className="flex items-center justify-between mb-16 px-4 relative max-w-sm mx-auto">
+      <div className="flex items-center justify-between mb-12 md:mb-16 px-4 relative max-w-[280px] sm:max-w-sm mx-auto">
         <div className="absolute top-1/2 left-0 w-full h-[1px] bg-neutral-100 -z-10" />
         {steps.map((s, i) => (
           <div key={s.id} className="relative">
@@ -104,11 +104,11 @@ const ReversePromptFlow: React.FC = () => {
                 opacity: [1, 0.5, 1],
               } : {}}
               transition={{ repeat: Infinity, duration: 1.5 }}
-              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 border relative ${
+              className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-500 border relative ${
                 step >= i ? 'bg-brand-black border-brand-black text-white shadow-xl shadow-black/20' : 'bg-white border-neutral-200 text-neutral-400'
               }`}
             >
-              {step > i ? <CheckCircle2 className="w-5 h-5 text-emerald-400" /> : s.icon}
+              {step > i ? <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" /> : <div className="scale-75 md:scale-100">{s.icon}</div>}
               
               {/* Active Ring */}
               {step === i && (
@@ -124,9 +124,9 @@ const ReversePromptFlow: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* Visual Zone */}
-        <div className="relative aspect-square bg-neutral-50 rounded-[2.5rem] overflow-hidden border border-neutral-100 shadow-inner group">
+        <div className="relative aspect-square max-h-[300px] sm:max-h-none bg-neutral-50 rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-neutral-100 shadow-inner group mx-auto w-full">
           <AnimatePresence mode="wait">
             {step === 0 && (
               <motion.div 
@@ -154,8 +154,8 @@ const ReversePromptFlow: React.FC = () => {
                   )}
                 </div>
 
-                <h3 className="text-xl font-display mb-2">Ingest Visual Data</h3>
-                <p className="text-neutral-400 text-sm mb-6">Upload any high-fidelity image to reverse-engineer its architectural DNA.</p>
+                <h3 className="text-lg md:text-xl font-display mb-2">Ingest Visual Data</h3>
+                <p className="text-neutral-400 text-[10px] md:text-sm mb-6">Upload any high-fidelity image to reverse-engineer its architectural DNA.</p>
                 
                 <div className="w-full mb-8">
                   <label className="block font-mono text-[9px] font-bold uppercase tracking-widest text-neutral-400 mb-2 text-left">Additional Context (Optional)</label>
@@ -233,8 +233,8 @@ const ReversePromptFlow: React.FC = () => {
         <div className="flex flex-col justify-center">
           <AnimatePresence mode="wait">
             {step === 0 && (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: -20 }}>
-                <h2 className="text-4xl font-display mb-6 tracking-tighter uppercase">Protocol <span className="text-brand-accent">A-1</span></h2>
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: -20 }} className="text-left">
+                <h2 className="text-2xl md:text-4xl font-display mb-6 tracking-tighter uppercase">Protocol <span className="text-brand-accent">A-1</span></h2>
                 <div className="space-y-6">
                   <div className="p-6 bg-white border border-neutral-100 rounded-2xl shadow-sm">
                     <div className="flex items-center gap-4 mb-3">
@@ -259,12 +259,12 @@ const ReversePromptFlow: React.FC = () => {
             )}
 
             {step === 1 && (
-              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+              <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 text-left">
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 animate-pulse">
                   <Cpu className="w-4 h-4" />
                   <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">Neural_Processing_Active</span>
                 </div>
-                <h2 className="text-4xl font-display tracking-tighter">SCANNING <span className="text-neutral-300">MORPHOLOGY</span></h2>
+                <h2 className="text-2xl md:text-4xl font-display tracking-tighter uppercase">SCANNING <span className="text-neutral-300">MORPHOLOGY</span></h2>
                 <div className="font-mono text-[11px] space-y-2 text-neutral-400 bg-neutral-50 p-6 rounded-2xl border border-neutral-100">
                   <div className="flex justify-between border-b border-neutral-200 pb-2">
                     <span>INDEXING_BUFFERS</span>
@@ -288,7 +288,7 @@ const ReversePromptFlow: React.FC = () => {
                   <Layers className="w-4 h-4" />
                   <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">Extracting_Stylistics</span>
                 </div>
-                <h2 className="text-4xl font-display tracking-tighter text-brand-black text-left">MAPPING <span className="text-brand-accent">GENETICS</span></h2>
+                <h2 className="text-2xl md:text-4xl font-display tracking-tighter text-brand-black text-left uppercase">MAPPING <span className="text-brand-accent">GENETICS</span></h2>
                 <div className="space-y-3">
                   {(result?.features || ['Analyzing Texture', 'Mapping Light', 'Decomposing Form']).map((f, i) => (
                     <motion.div 
@@ -313,8 +313,8 @@ const ReversePromptFlow: React.FC = () => {
                   <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">Synthesis_Complete</span>
                 </div>
                 
-                <div className="flex items-center justify-between gap-4">
-                  <h2 className="text-4xl font-display tracking-tighter uppercase">ABSOLUTE <span className="text-brand-accent">PROMPT</span></h2>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <h2 className="text-2xl md:text-4xl font-display tracking-tighter uppercase">ABSOLUTE <span className="text-brand-accent">PROMPT</span></h2>
                   
                   {/* Format Switcher */}
                   <div className="flex bg-neutral-100 p-1 rounded-lg border border-neutral-200">
@@ -336,7 +336,7 @@ const ReversePromptFlow: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-8 bg-neutral-50 rounded-3xl border border-brand-accent/20 relative group overflow-hidden">
+                <div className="p-5 md:p-8 bg-neutral-50 rounded-[1.5rem] md:rounded-3xl border border-brand-accent/20 relative group overflow-hidden">
                   <button 
                     onClick={() => {
                       const textToCopy = outputFormat === 'json' ? result.absolute_prompt : 

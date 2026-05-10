@@ -13,9 +13,33 @@ export interface NeuralBlueprint {
   product_name?: string;
   mission_statement?: string;
   absolute_prompt: string;
+  xml_prompt?: string;
+  yaml_prompt?: string;
   amplified_problem?: string;
   features?: string[];
   roadmap?: string[];
+  technical_stack?: {
+    frontend: string;
+    backend: string;
+    database: string;
+    schema: string[];
+  };
+  monetization?: {
+    model: string;
+    pricing_tiers: string[];
+    gtm_strategy: string[];
+  };
+  design_tokens?: {
+    colors: string[];
+    typography: string;
+  };
+  market_gap?: string;
+  psychographics?: {
+    persona: string;
+    pain_points: string[];
+    triggers: string[];
+  };
+  moodboard_prompts?: string[];
   stats: {
     complexity: number;
     tokens?: number;
@@ -106,18 +130,26 @@ export const runNeuralScan = async (concept: string, imageBase64?: string, userD
 export const runStartupArchitect = async (niche: string, problem: string, concept: string): Promise<NeuralBlueprint> => {
   try {
     const parts: any[] = [{
-      text: `You are a Senior Product Architect. Build a startup blueprint for:
+      text: `You are a Senior Product Architect & Startup Founder. Build a high-fidelity startup blueprint for:
       Niche: ${niche}
       Problem: ${problem}
       Concept: ${concept}
 
-      Return JSON with:
-      - product_name: High-end branding
-      - mission_statement: Professional & Ambitious
-      - absolute_prompt: The core architectural prompt
-      - features: [Array of 3 core features]
-      - roadmap: [Array of 3 phases]
-      - stats: { market_fit: "High/Med/Low", complexity: "Level 1-10", scalability: "Percentage" }`
+      Your goal is to provide an un-neglectable, actionable blueprint that a creator can use to start building today.
+      
+      Return a JSON object with:
+      - product_name: High-end branding name
+      - mission_statement: Ambitious & precise
+      - absolute_prompt: The core architectural prompt for the AI to understand this vision
+      - market_gap: Analysis of why this needs to exist NOW
+      - psychographics: { persona: "Ideal customer", pain_points: [], triggers: ["What makes them buy"] }
+      - moodboard_prompts: [Array of 4 high-fidelity Midjourney prompts for the brand atmosphere]
+      - features: [Array of 3 core features with {name, description}]
+      - roadmap: [Array of 3 phases with {name, description}]
+      - technical_stack: { frontend, backend, database, schema: [Array of table/collection descriptions] }
+      - monetization: { model, pricing_tiers: [Array], gtm_strategy: [Array of 3 steps] }
+      - design_tokens: { colors: [Array of 3 HEX codes], typography: "Font mood" }
+      - stats: { market_fit: "Percentage", complexity: 1-10, scalability: "Percentage" }`
     }];
 
     const response = await generateWithFallback(parts, true);
@@ -126,4 +158,53 @@ export const runStartupArchitect = async (niche: string, problem: string, concep
     console.error("Startup Architect Error:", error);
     throw error;
   }
+};
+
+/**
+ * FEATURE #3: CONVERSATIONAL EXPERT
+ * Real-time chat for brand consultation.
+ */
+let lastSuccessfulModel: string | null = null;
+
+export const runConversationalExpert = async (message: string, history: any[] = [], brandContext: {name: string, vision: string} = {name: '', vision: ''}): Promise<string> => {
+  const models = ["gemini-2.0-flash-lite", "gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"];
+  
+  // Reorder models to try the last successful one first
+  const prioritizedModels = lastSuccessfulModel 
+    ? [lastSuccessfulModel, ...models.filter(m => m !== lastSuccessfulModel)]
+    : models;
+
+  let lastError = null;
+
+  const systemInstruction = `You are K-7, a Senior Neural Brand Architect. You are in a 2-minute voice session with a founder. 
+  CURRENT PROJECT: ${brandContext.name}
+  VISION: ${brandContext.vision}
+  Be professional, elite, and precise. Reference their project name occasionally. Ask deep questions about their brand vision. Keep responses concise (under 50 words) for voice clarity.`;
+
+  for (const modelName of prioritizedModels) {
+    try {
+      // Construct the conversation contents with system context and history
+      const contents = [
+        { role: "user", parts: [{ text: systemInstruction }] },
+        { role: "model", parts: [{ text: "Acknowledged. Establishing neural link. I am K-7." }] },
+        ...history,
+        { role: "user", parts: [{ text: message }] }
+      ];
+
+      const response = await genAI.models.generateContent({
+        model: modelName,
+        contents: contents
+      });
+
+      lastSuccessfulModel = modelName; // Stick to this model for the rest of the session
+      return response.text || "";
+    } catch (err) {
+      lastError = err;
+      console.warn(`⚠️ Conversational Expert: Model ${modelName} failed, trying next...`);
+      continue;
+    }
+  }
+  
+  console.error("All conversational models failed:", lastError);
+  throw lastError;
 };

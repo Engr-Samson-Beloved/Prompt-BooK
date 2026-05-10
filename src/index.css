@@ -50,7 +50,7 @@
   }
 
   .tech-border {
-    @apply relative border border-neutral-200 p-8;
+    @apply relative border border-neutral-200 p-6 md:p-8;
     &::before, &::after {
       content: '';
       @apply absolute w-4 h-4 border-brand-accent;
