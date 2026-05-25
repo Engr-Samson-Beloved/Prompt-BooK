@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2, Download, ExternalLink, Users, Target, Search } from 'lucide-react';
-import { runStartupArchitect, NeuralBlueprint } from '../gemini';
+import { Bot, Sparkles, ChevronRight, Phone, Calendar, UserCheck, Shield, BrainCircuit, Zap, Globe, MessageSquare, ArrowRight, CheckCircle2, Download, ExternalLink, Users, Target, Search, Send, Terminal, Server, Activity, RefreshCw } from 'lucide-react';
+import { runStartupArchitect, runConversationalExpert, NeuralBlueprint } from '../gemini';
 import { generateBrandConstitution } from '../services/ExportService';
 import VoiceExpertSession from './VoiceExpertSession';
 
@@ -188,6 +188,62 @@ const HireAgent: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [brandInfo, setBrandInfo] = useState({ name: '', vision: '', audience: '' });
   const [blueprint, setBlueprint] = useState<NeuralBlueprint | null>(null);
+
+  // S-4 Console States
+  const [s4Autonomous, setS4Autonomous] = useState(true);
+  const [s4ThreadCache, setS4ThreadCache] = useState(true);
+  const [s4TestMessage, setS4TestMessage] = useState('');
+  const [s4IsSimulating, setS4IsSimulating] = useState(false);
+  const [s4Logs, setS4Logs] = useState<string[]>([
+    `[SYSTEM] Booting S-4 Digital Twin Engine...`,
+    `[SYSTEM] Handshake verified via Meta Webhook API.`,
+    `[SYSTEM] Sync channel established for WhatsApp (wa_id: +1-555-019-2831).`,
+    `[STATUS] Awaiting biological incoming message...`
+  ]);
+  const s4LogsEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (s4LogsEndRef.current) {
+      s4LogsEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [s4Logs]);
+
+  const handleSimulateS4 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!s4TestMessage.trim() || s4IsSimulating) return;
+
+    const userMsg = s4TestMessage;
+    setS4TestMessage('');
+    setS4IsSimulating(true);
+
+    setS4Logs(prev => [
+      ...prev,
+      `[USER (WhatsApp)] "${userMsg}"`,
+      `[S-4] Processing semantic intent...`,
+      `[S-4] Querying Gemini model fallback...`
+    ]);
+
+    try {
+      const s4Prompt = `You are the S-4 Social Twin, an elite autonomous digital agent for a founder.
+      Role: Manage customer inquiries, WhatsApp, and social communications.
+      Current Query: "${userMsg}"
+      Keep responses brief, direct, and under 40 words. Professional and efficient.`;
+      
+      const response = await runConversationalExpert(s4Prompt, []);
+      setS4Logs(prev => [
+        ...prev,
+        `[S-4 (AI Response)] "${response}"`,
+        `[SYSTEM] WhatsApp packet dispatched successfully to recipient.`
+      ]);
+    } catch (err: any) {
+      setS4Logs(prev => [
+        ...prev,
+        `[S-4 ERROR] Neural connection lost: ${err.message || 'Unknown error'}`
+      ]);
+    } finally {
+      setS4IsSimulating(false);
+    }
+  };
 
   const agents = {
     brand: {
@@ -496,53 +552,167 @@ const HireAgent: React.FC = () => {
                         </div>
                       )}
                     </>
-                  )}
-
-                  {activeStep === 3 && (
+                                    {activeStep === 3 && (
                     <div className="text-center space-y-8">
                       <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
                         <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                        <div className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-sm space-y-6">
-                           <div>
-                              <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2">Neural_Blueprint</span>
-                              <h5 className="text-3xl font-display uppercase tracking-tight text-brand-black">{blueprint?.product_name || "PROTOTYPE_v1"}</h5>
-                              <p className="text-sm text-neutral-500 mt-2 italic">"{blueprint?.mission_statement}"</p>
-                           </div>
+                      {activeAgent === 'brand' ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                          <div className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-sm space-y-6">
+                             <div>
+                                <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2">Neural_Blueprint</span>
+                                <h5 className="text-3xl font-display uppercase tracking-tight text-brand-black">{blueprint?.product_name || "PROTOTYPE_v1"}</h5>
+                                <p className="text-sm text-neutral-500 mt-2 italic">"{blueprint?.mission_statement}"</p>
+                             </div>
 
-                           <div className="space-y-4">
-                              <div className="flex items-start gap-4">
-                                <div className="p-2 bg-neutral-50 rounded-lg"><Search className="w-4 h-4 text-brand-accent" /></div>
-                                <div>
-                                   <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Market_Gap</span>
-                                   <p className="text-xs text-brand-black font-medium">{blueprint?.market_gap || "Analyzing scarcity patterns..."}</p>
+                             <div className="space-y-4">
+                                <div className="flex items-start gap-4">
+                                  <div className="p-2 bg-neutral-50 rounded-lg"><Search className="w-4 h-4 text-brand-accent" /></div>
+                                  <div>
+                                     <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Market_Gap</span>
+                                     <p className="text-xs text-brand-black font-medium">{blueprint?.market_gap || "Analyzing scarcity patterns..."}</p>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="flex items-start gap-4">
-                                <div className="p-2 bg-neutral-50 rounded-lg"><Target className="w-4 h-4 text-emerald-500" /></div>
-                                <div>
-                                   <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Neural_Target</span>
-                                   <p className="text-xs text-brand-black font-medium">{blueprint?.psychographics?.persona || "Biological nodes mapped."}</p>
+                                <div className="flex items-start gap-4">
+                                  <div className="p-2 bg-neutral-50 rounded-lg"><Target className="w-4 h-4 text-emerald-500" /></div>
+                                  <div>
+                                     <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest">Neural_Target</span>
+                                     <p className="text-xs text-brand-black font-medium">{blueprint?.psychographics?.persona || "Biological nodes mapped."}</p>
+                                  </div>
                                 </div>
+                             </div>
+
+                             <button 
+                                onClick={() => blueprint && generateBrandConstitution(blueprint)}
+                                className="w-full py-4 bg-brand-black text-white rounded-2xl font-mono text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-neutral-800 transition-all group"
+                             >
+                                <Download className="w-4 h-4 group-hover:translate-y-1 transition-transform" /> EXPORT_CONSTITUTION_PDF
+                             </button>
+                          </div>
+
+                          <div className="bg-neutral-50 border border-neutral-200 rounded-3xl p-8">
+                             <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-4">Aesthetic_Moodboard</span>
+                             <MoodboardGrid prompts={blueprint?.moodboard_prompts || []} colors={blueprint?.design_tokens?.colors || ['#ffcc00', '#000', '#fff']} />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-left">
+                          {/* S-4 SYSTEM COMMANDS */}
+                          <div className="bg-white border border-neutral-100 rounded-3xl p-8 shadow-sm space-y-6">
+                            <div>
+                              <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2" style={{ color: '#00ccff' }}>S-4_CONTROL_CENTER</span>
+                              <h5 className="text-3xl font-display uppercase tracking-tight text-brand-black">AUTONOMOUS_TWIN_v1.0</h5>
+                              <p className="text-sm text-neutral-500 mt-2">Managing customer channels, sync lines, and live responses.</p>
+                            </div>
+
+                            <div className="space-y-4">
+                              <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-2xl border border-neutral-100">
+                                <div className="flex items-center gap-3">
+                                  <MessageSquare className="w-5 h-5 text-emerald-500 animate-pulse" />
+                                  <div>
+                                    <span className="block text-[10px] font-mono font-bold uppercase text-neutral-400">WhatsApp_Link</span>
+                                    <span className="text-xs font-mono font-bold text-brand-black">CONNECTED (wa_id: +1-555-019-2831)</span>
+                                  </div>
+                                </div>
+                                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                               </div>
-                           </div>
 
-                           <button 
-                              onClick={() => blueprint && generateBrandConstitution(blueprint)}
-                              className="w-full py-4 bg-brand-black text-white rounded-2xl font-mono text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-neutral-800 transition-all group"
-                           >
-                              <Download className="w-4 h-4 group-hover:translate-y-1 transition-transform" /> EXPORT_CONSTITUTION_PDF
-                           </button>
+                              <div className="flex items-center justify-between p-4 bg-neutral-50 rounded-2xl border border-neutral-100">
+                                <div className="flex items-center gap-3">
+                                  <Globe className="w-5 h-5 text-blue-500" />
+                                  <div>
+                                    <span className="block text-[10px] font-mono font-bold uppercase text-neutral-400">Gmail_Sync</span>
+                                    <span className="text-xs font-mono font-bold text-brand-black">ACTIVE (co-pilot@domain.com)</span>
+                                  </div>
+                                </div>
+                                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                              </div>
+                            </div>
+
+                            {/* Control Switches */}
+                            <div className="p-6 border border-neutral-100 rounded-2xl space-y-4">
+                              <span className="block text-[9px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-2">Twin_Parameters</span>
+                              
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-mono text-neutral-500">AUTONOMOUS_RESPONSE</span>
+                                <button 
+                                  onClick={() => setS4Autonomous(!s4Autonomous)} 
+                                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${s4Autonomous ? 'bg-[#00ccff]' : 'bg-neutral-200'}`}
+                                >
+                                  <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-300 ${s4Autonomous ? 'translate-x-6' : 'translate-x-0'}`} />
+                                </button>
+                              </div>
+
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs font-mono text-neutral-500">THREAD_HISTORY_CACHE</span>
+                                <button 
+                                  onClick={() => setS4ThreadCache(!s4ThreadCache)} 
+                                  className={`w-12 h-6 rounded-full p-1 transition-colors duration-300 ${s4ThreadCache ? 'bg-[#00ccff]' : 'bg-neutral-200'}`}
+                                >
+                                  <div className={`w-4 h-4 bg-white rounded-full transition-transform duration-300 ${s4ThreadCache ? 'translate-x-6' : 'translate-x-0'}`} />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* S-4 TERMINAL LOG FEED */}
+                          <div className="bg-[#0b0c10] border border-neutral-800 rounded-3xl p-6 flex flex-col h-[400px]">
+                            <div className="flex items-center justify-between pb-4 border-b border-neutral-800 mb-4">
+                              <div className="flex items-center gap-2">
+                                <Terminal className="w-4 h-4 text-[#00ccff]" />
+                                <span className="font-mono text-xs font-bold text-[#00ccff] uppercase">Neural_Logs</span>
+                              </div>
+                              <span className="px-2 py-0.5 text-[8px] font-mono font-bold text-emerald-400 bg-emerald-500/10 rounded border border-emerald-500/20 uppercase tracking-widest animate-pulse">LIVE</span>
+                            </div>
+
+                            <div className="flex-grow overflow-y-auto font-mono text-[10px] space-y-2 pr-2 scrollbar-thin scrollbar-thumb-neutral-800">
+                              {s4Logs.map((log, i) => {
+                                let textColor = 'text-neutral-400';
+                                if (log.startsWith('[SYSTEM]')) textColor = 'text-blue-400';
+                                else if (log.startsWith('[STATUS]')) textColor = 'text-yellow-500';
+                                else if (log.startsWith('[USER')) textColor = 'text-white font-bold';
+                                else if (log.startsWith('[S-4 (AI')) textColor = 'text-[#00ccff] font-bold';
+                                else if (log.startsWith('[S-4]')) textColor = 'text-[#00ccff] opacity-70';
+                                else if (log.startsWith('[S-4 ERROR]')) textColor = 'text-red-500 font-bold';
+                                
+                                return (
+                                  <div key={i} className={`whitespace-pre-wrap leading-relaxed ${textColor}`}>
+                                    {log}
+                                  </div>
+                                );
+                              })}
+                              {s4IsSimulating && (
+                                <div className="text-[#00ccff] font-mono text-[10px] animate-pulse">
+                                  ⚡ Twin thinking...
+                                </div>
+                              )}
+                              <div ref={s4LogsEndRef} />
+                            </div>
+
+                            {/* Simulate User Interaction */}
+                            <form onSubmit={handleSimulateS4} className="mt-4 pt-4 border-t border-neutral-800 flex gap-2">
+                              <input 
+                                type="text"
+                                placeholder="Simulate incoming WhatsApp message..."
+                                value={s4TestMessage}
+                                onChange={(e) => setS4TestMessage(e.target.value)}
+                                disabled={s4IsSimulating}
+                                className="flex-grow bg-white/5 border border-neutral-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#00ccff] transition-all font-mono"
+                              />
+                              <button 
+                                type="submit"
+                                disabled={s4IsSimulating || !s4TestMessage.trim()}
+                                className="px-4 bg-[#00ccff] text-black rounded-xl hover:bg-white hover:text-black transition-colors disabled:opacity-20 flex items-center justify-center"
+                              >
+                                <Send className="w-3 h-3" />
+                              </button>
+                            </form>
+                          </div>
                         </div>
-
-                        <div className="bg-neutral-50 border border-neutral-200 rounded-3xl p-8">
-                           <span className="block text-[10px] font-mono font-bold text-neutral-400 uppercase tracking-widest mb-4">Aesthetic_Moodboard</span>
-                           <MoodboardGrid prompts={blueprint?.moodboard_prompts || []} colors={blueprint?.design_tokens?.colors || ['#ffcc00', '#000', '#fff']} />
-                        </div>
-                      </div>
-
+                      )}
+                      
                       <button 
                         onClick={() => { setActiveStep(0); setBlueprint(null); }}
                         className="text-[10px] font-mono font-bold uppercase tracking-widest hover:gap-4 flex items-center gap-2 mx-auto transition-all text-neutral-400"
@@ -550,7 +720,7 @@ const HireAgent: React.FC = () => {
                         RESTART_PROTOCOL <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
-                  )}
+                  )}  )}
                 </motion.div>
               </AnimatePresence>
 

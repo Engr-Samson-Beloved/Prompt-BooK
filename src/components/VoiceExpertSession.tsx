@@ -141,7 +141,7 @@ const VoiceExpertSession: React.FC<VoiceExpertSessionProps> = ({ onClose, onComp
       </div>
 
       <div className="relative mb-16">
-        <motion.div +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        <motion.div
           animate={{ 
             scale: isListening ? [1, 1.1, 1] : 1,
             rotate: isThinking ? 360 : 0
